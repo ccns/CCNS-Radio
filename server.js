@@ -17,6 +17,10 @@ app.use(express.static(__dirname + '/public'));
 var queue = [];
 var history = [];
 io.on('connection', function (socket) {
+  socket.on('get list', function (data) {
+    console.log('get list');
+    socket.broadcast.emit('new song', {queue: queue, history: history});
+  })
   socket.on('new song', function (data) {
     console.log('new song: '+data.id);
     var id = data.id;
@@ -40,6 +44,8 @@ io.on('connection', function (socket) {
       })
     } else if( !in_queue ) {
       queue.push(in_history);
+      socket.broadcast.emit('new song', {queue: queue, history: history});
+    } else {
       socket.broadcast.emit('new song', {queue: queue, history: history});
     }
   });
