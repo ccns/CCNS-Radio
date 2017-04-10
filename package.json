@@ -1,0 +1,17 @@
+{
+  "name": "ccns-radio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodeom server.js",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.2",
+    "request": "^2.81.0",
+    "socket.io": "^1.7.3"
+  }
+}
