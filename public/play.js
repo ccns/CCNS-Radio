@@ -31,6 +31,10 @@ $(function() {
   function play(id) {
     player.loadVideoById(id, 5, "large")
   }
+  $('#cut').click(function(){
+    player.stopVideo();
+    io().emit('get song');
+  });
   var socket = io();
   socket.on('get song', function (data) {
     console.log(data);
