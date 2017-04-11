@@ -19,7 +19,14 @@ var history = [];
 io.on('connection', function (socket) {
   socket.on('get list', function (data) {
     console.log('get list');
-    socket.broadcast.emit('new song', {queue: queue, history: history});
+    socket.broadcast.emit('update list', {queue: queue, history: history});
+  })
+  socket.on('del song', function (data) {
+    console.log('del list');
+    var id = data.id;
+    queue = queue.filter(function(d){return d.id!=id;});
+    history = history.filter(function(d){return d.id!=id;});
+    socket.broadcast.emit('update list', {queue: queue, history: history});
   })
   socket.on('new song', function (data) {
     console.log('new song: '+data.id);
@@ -40,13 +47,13 @@ io.on('connection', function (socket) {
         };
         queue.push(song_data);
         history.push(song_data);
-        socket.broadcast.emit('new song', {queue: queue, history: history});
+        socket.broadcast.emit('update list', {queue: queue, history: history});
       })
     } else if( !in_queue ) {
       queue.push(in_history);
-      socket.broadcast.emit('new song', {queue: queue, history: history});
+      socket.broadcast.emit('update list', {queue: queue, history: history});
     } else {
-      socket.broadcast.emit('new song', {queue: queue, history: history});
+      socket.broadcast.emit('update list', {queue: queue, history: history});
     }
   });
 
