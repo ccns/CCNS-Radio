@@ -18,7 +18,6 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-  io().emit('get song');
 }
 
 function onPlayerStateChange(event) {
