@@ -29,7 +29,7 @@ function onPlayerStateChange(event) {
 
 $(function() {
   function play(id) {
-    player.loadVideoById(id, 5, "large")
+    player.loadVideoById(id, 0, "large")
   }
   $('#cut').click(function(){
     player.stopVideo();
