@@ -15,7 +15,11 @@ server.listen(port, function () {
 app.use(express.static(__dirname + '/public'));
 
 var queue = [];
-var history = [];
+var history = [{
+  id: "12hYTyzvEMg",
+  title: "純音樂電台 | Music➨24/7",
+  url: "https://youtu.be/12hYTyzvEMg"
+}];
 var playing = false;
 io.on('connection', function (socket) {
   socket.on('get list', function (data) {
@@ -35,8 +39,8 @@ io.on('connection', function (socket) {
 
     var in_queue = queue.find(function(d){return d.id==id;});
     var in_history = history.find(function(d){return d.id==id;});
-    console.log(in_queue);
-    console.log(in_history);
+    // console.log(in_queue);
+    // console.log(in_history);
 
     if( !in_queue && !in_history && playing.id!=id ) {
       request('https://www.googleapis.com/youtube/v3/videos?part=snippet&key=AIzaSyD0H-vB9MILeb3nwzpoWYL96puFi_8dsCs&id='+id, function(err, res, body){
