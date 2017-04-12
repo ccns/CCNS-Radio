@@ -18,7 +18,7 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-  io.emit('get list');
+  io().emit('get list');
 }
 
 function onPlayerStateChange(event) {
@@ -40,6 +40,10 @@ $(function() {
     console.log(data);
     play(data.song.id);
     updateList(data);
+    $("#playing")
+      .text(data.song.title)
+      .attr('href', data.song.url)
+      .attr('target', '_blank')
   });
   socket.on('update list', function (data) {
     console.log(data);

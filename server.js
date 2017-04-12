@@ -16,6 +16,7 @@ app.use(express.static(__dirname + '/public'));
 
 var queue = [];
 var history = [];
+var playing = false;
 io.on('connection', function (socket) {
   socket.on('get list', function (data) {
     console.log('get list');
@@ -34,8 +35,10 @@ io.on('connection', function (socket) {
 
     var in_queue = queue.find(function(d){return d.id==id;});
     var in_history = history.find(function(d){return d.id==id;});
+    console.log(in_queue);
+    console.log(in_history);
 
-    if( !in_queue && !in_history ) {
+    if( !in_queue && !in_history && playing.id!=id ) {
       request('https://www.googleapis.com/youtube/v3/videos?part=snippet&key=AIzaSyD0H-vB9MILeb3nwzpoWYL96puFi_8dsCs&id='+id, function(err, res, body){
         var body = JSON.parse(body);
         var title = body.items[0].snippet.title;
@@ -46,12 +49,8 @@ io.on('connection', function (socket) {
           url: url
         };
         queue.push(song_data);
-        history.push(song_data);
         socket.broadcast.emit('update list', {queue: queue, history: history});
       })
-    } else if( !in_queue ) {
-      queue.push(in_history);
-      socket.broadcast.emit('update list', {queue: queue, history: history});
     } else {
       socket.broadcast.emit('update list', {queue: queue, history: history});
     }
@@ -59,9 +58,24 @@ io.on('connection', function (socket) {
 
   socket.on('get song', function(data) {
     console.log('get song!');
-    if(queue.length)
-      socket.broadcast.emit('get song', {song: queue.shift(), queue: queue, history: history});
-    else
-      socket.broadcast.emit('get song', {song: history[Math.floor(Math.random()*history.length)], queue: queue, history: history});
+    if(playing)
+      history.push(playing);
+    if(queue.length) {
+      var song_data = queue.shift();
+      playing = song_data;
+      socket.broadcast.emit('get song', {song: song_data, queue: queue, history: history});
+    } else {
+      var song_data = history.splice(Math.floor(Math.random()*history.length), 1)[0];
+      playing = song_data;
+      socket.broadcast.emit('get song', {song: song_data, queue: queue, history: history});
+    }
+  })
+
+  socket.on('push queue', function(data) {
+    var id = data.id;
+    var index = history.map(function(d){return d.id;}).indexOf(id);
+    var song_data = history.splice(index, 1)[0];
+    playing = song_data;
+    socket.broadcast.emit('get song', {song: song_data, queue: queue, history: history});
   })
 });
