@@ -18,6 +18,7 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
+  io.emit('get list');
 }
 
 function onPlayerStateChange(event) {
