@@ -14,7 +14,7 @@ $(function() {
         data.id = params['v'];
         socket.emit('new song', data);
       } else {
-        alert("Invalid url!");
+        alert("Invalid url: "+url);
       }
     })
   });
