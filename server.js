@@ -42,7 +42,7 @@ io.on('connection', function (socket) {
     // console.log(in_queue);
     // console.log(in_history);
 
-    if( !in_queue && !in_history && playing.id!=id ) {
+    if( !in_queue && !in_history && !playing && playing.id!=id ) {
       request('https://www.googleapis.com/youtube/v3/videos?part=snippet&key=AIzaSyD0H-vB9MILeb3nwzpoWYL96puFi_8dsCs&id='+id, function(err, res, body){
         var body = JSON.parse(body);
         var title = body.items[0].snippet.title;
