@@ -62,8 +62,6 @@ io.on('connection', function (socket) {
 
   socket.on('get song', function(data) {
     console.log('get song!');
-    if(playing)
-      history.push(playing);
     if(queue.length) {
       var song_data = queue.shift();
       playing = song_data;
@@ -73,6 +71,8 @@ io.on('connection', function (socket) {
       playing = song_data;
       socket.broadcast.emit('get song', {song: song_data, queue: queue, history: history});
     }
+    if(playing)
+      history.push(playing);
   })
 
   socket.on('push queue', function(data) {
