@@ -69,13 +69,11 @@ io.on('connection', function (socket) {
     else
       song_data = history.splice(Math.floor(Math.random()*history.length), 1)[0];
 
-    socket.broadcast.emit('get song', {song: song_data, queue: queue, history: history});
     if(playing)
       history.push(playing);
-    else
-      history.push(song_data);
-
     playing = song_data;
+
+    socket.broadcast.emit('get song', {song: song_data, queue: queue, history: history});
   })
 
   socket.on('push queue', function(data) {
