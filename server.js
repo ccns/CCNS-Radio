@@ -62,17 +62,16 @@ io.on('connection', function (socket) {
 
   socket.on('get song', function(data) {
     console.log('get song!');
+    var son_data;
     if(queue.length) {
-      var song_data = queue.shift();
-      playing = song_data;
-      socket.broadcast.emit('get song', {song: song_data, queue: queue, history: history});
+      song_data = queue.shift();
     } else {
-      var song_data = history.splice(Math.floor(Math.random()*history.length), 1)[0];
-      playing = song_data;
-      socket.broadcast.emit('get song', {song: song_data, queue: queue, history: history});
+      song_data = history.splice(Math.floor(Math.random()*history.length), 1)[0];
     }
+    socket.broadcast.emit('get song', {song: song_data, queue: queue, history: history});
     if(playing)
       history.push(playing);
+    playing = song_data;
   })
 
   socket.on('push queue', function(data) {
