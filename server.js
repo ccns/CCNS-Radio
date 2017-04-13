@@ -39,10 +39,13 @@ io.on('connection', function (socket) {
 
     var in_queue = queue.find(function(d){return d.id==id;});
     var in_history = history.find(function(d){return d.id==id;});
+    // playing is not empty -> playing.id!=id -> false
+    // playing is empty -> false
+    var in_playing = !(!playing || (playing.id!=id));
     // console.log(in_queue);
     // console.log(in_history);
 
-    if( !in_queue && !in_history && !playing && playing.id!=id ) {
+    if( !in_queue && !in_history && !in_playing ){
       request('https://www.googleapis.com/youtube/v3/videos?part=snippet&key=AIzaSyD0H-vB9MILeb3nwzpoWYL96puFi_8dsCs&id='+id, function(err, res, body){
         var body = JSON.parse(body);
         var title = body.items[0].snippet.title;
