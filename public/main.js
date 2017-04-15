@@ -10,7 +10,6 @@ function onYouTubeIframeAPIReady() {
   player = new YT.Player('player', {
     height: '150',
     width: '100%',
-    videoId: '12hYTyzvEMg',
     events: {
       'onReady': onPlayerReady,
       'onStateChange': onPlayerStateChange
@@ -21,11 +20,17 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
   io().emit('get list');
   io().emit('get playing');
+  // mute if client
+  if(window.location.pathname == '/client')
+    player.mute()
 }
 
 function onPlayerStateChange(event) {
   if(event.data === 0) {
     io().emit('get song');
+  }
+  if(event.data === 1) {
+    updatePlayingByIFrame();
   }
 }
 
@@ -67,7 +72,6 @@ $(function() {
   // radio
   $('#radio').click(function(){
     play('12hYTyzvEMg');
-    updatePlayingByIFrame();
   });
 
   // submit request
@@ -106,7 +110,7 @@ $(function() {
     console.log(data);
     play(data.playing.id);
     updateList(data);
-    updatePlaying(data);
+    // updatePlaying(data);
   });
   io().on('update list', function (data) {
     console.log(data);
@@ -116,4 +120,11 @@ $(function() {
     console.log(data);
     updatePlaying(data);
   });
+
+  // hide if client
+  if(window.location.pathname == '/client') {
+    $("#player").hide();
+    $("#playpause").hide();
+  }
+
 });

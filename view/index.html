@@ -20,9 +20,11 @@
       <div class="ts container">
         <div class="ts grid">
           <div class="four wide column">
-            <h3>Now Playing</h3>
-            <div id="player"></div>
-            <a id="playing">Song playing.</a>
+            <div id="play">
+              <h3>Now Playing</h3>
+              <div id="player"></div>
+              <a id="playing">Nothing playing ...</a>
+            </div>
             <div class="request">
               <form class="ts form">
                 <div class="field">
@@ -38,10 +40,10 @@
             <h3>Queue</h3>
             <div id="queue">
               <div class="ts items">
-                <div class="ts item">
-                  <i class="remove icon"></i>
-                  <a>Song in queue.</a>
-                </div>
+                <!-- <div class="ts item"> -->
+                <!--   <i class="remove icon"></i> -->
+                <!--   <a>Song in queue.</a> -->
+                <!-- </div> -->
               </div>
             </div>
           </div>
@@ -50,11 +52,11 @@
             <h3>History</h3>
             <div id="history">
               <div class="ts items">
-                <div class="ts item">
-                  <i class="plus icon"></i>
-                  <i class="remove icon"></i>
-                  <a>Song in History.</a>
-                </div>
+                <!-- <div class="ts item"> -->
+                <!--   <i class="plus icon"></i> -->
+                <!--   <i class="remove icon"></i> -->
+                <!--   <a>Song in History.</a> -->
+                <!-- </div> -->
               </div>
             </div>
           </div>
@@ -75,6 +77,6 @@
 		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/updateList.js"></script>
-		<script src="/play.js"></script>
+		<script src="/main.js"></script>
 	</body>
 </html>

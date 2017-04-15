@@ -8,8 +8,8 @@
  text-align: center;
  bottom: 0;
 }
-.request {
- margin-top: 20px;
+#play {
+ margin-bottom: 20px;
 }
 .request .ts.form .field {
  margin-bottom: 10px;

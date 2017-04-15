@@ -15,17 +15,17 @@ server.listen(port, function () {
 });
 
 // Static folder
-app.use(express.static(path.join(__dirname+'/view')));
+app.use(express.static(path.join(__dirname+'/public')));
 
 // Routing
 app.get('/', function(req, res) {
-  res.redirect('/push');
+  if(req.ip=='::1')
+    res.sendFile(path.join(__dirname+'/view/index.html'));
+  else
+    res.redirect('/client');
 })
-app.get('/push', function(req, res) {
-  res.sendFile(path.join(__dirname+'/view/push.html'));
-})
-app.get('/play', function(req, res) {
-  res.sendFile(path.join(__dirname+'/view/play.html'));
+app.get('/client', function(req, res) {
+  res.sendFile(path.join(__dirname+'/view/index.html'));
 })
 
 var queue = [];
