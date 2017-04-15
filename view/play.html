@@ -1,20 +1,75 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-ts-native>
 	<head>
 		<meta charset="UTF-8">
-		<title>Socket.IO Chat Example</title>
+		<title>CCNS Radio</title>
 		<!-- <link rel="stylesheet" href="style.css"> -->
+    <link rel="stylesheet" href="//cdn.rawgit.com/TeaMeow/TocasUI/master/dist/tocas.min.css">
+    <link rel="stylesheet" href="main.css">
 	</head>
 	<body>
-		<button id="cut">下一首</button>
-		<h1>新增歌曲: http://192.168.0.102:3000</h1>
-		<h3>Now Playing: <a id="playing"></a></h3>
-		<div id="player"></div>
-		<h3>Queue:</h3>
-		<div id="queue"><ul></ul></div>
-		<h3>History:</h3>
-		<div id="history"><ul></ul></div>
-		<div style="position: fixed; right: 60px; bottom: -3.5px;"><img src="http://imgur.com/g4t5BB6.png" style="opacity: .89;"/></div>
+    <div class="header">
+      <div class="ts menu">
+        <div class="ts container">
+          <a class="item">新增歌曲: http://192.168.0.102:3000</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="ts container">
+        <div class="ts grid">
+          <div class="four wide column">
+            <h3>Now Playing</h3>
+            <div id="player"></div>
+            <a id="playing">Song playing.</a>
+            <div class="request">
+              <form class="ts form">
+                <div class="field">
+                  <h3>Request a song</h3>
+                  <textarea id="urls" rows="10"></textarea>
+                </div>
+              </form>
+              <button id="submit-request" class="ts button">送出</button>
+            </div>
+          </div>
+
+          <div class="six wide column">
+            <h3>Queue</h3>
+            <div id="queue">
+              <div class="ts items">
+                <div class="ts item">
+                  <i class="remove icon"></i>
+                  <a>Song in queue.</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="six wide column">
+            <h3>History</h3>
+            <div id="history">
+              <div class="ts items">
+                <div class="ts item">
+                  <i class="plus icon"></i>
+                  <i class="remove icon"></i>
+                  <a>Song in History.</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="control bar">
+      <div class="ts container">
+        <button id="radio" class="ts primary button">純音樂電台</button>
+        <button id="playpause" class="ts primary button">播放/暫停</button>
+        <button id="next" class="ts primary button">下一首</button>
+      </div>
+    </div>
+
 
 		<script src="https://use.fontawesome.com/b1359841fc.js"></script>
 		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>

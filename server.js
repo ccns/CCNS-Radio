@@ -29,11 +29,7 @@ app.get('/play', function(req, res) {
 })
 
 var queue = [];
-var history = [{
-  id: "12hYTyzvEMg",
-  title: "純音樂電台 | Music➨24/7",
-  url: "https://youtu.be/12hYTyzvEMg"
-}];
+var history = [];
 var playing = false;
 io.on('connection', function (socket) {
   // Create
@@ -46,8 +42,10 @@ io.on('connection', function (socket) {
     // playing is not empty -> playing.id!=id -> false
     // playing is empty -> false
     var in_playing = !(!playing || (playing.id!=id));
+    // console.log("New[debug]")
     // console.log(in_queue);
     // console.log(in_history);
+    // console.log(in_playing);
 
     if( !in_queue && !in_history && !in_playing ){
       request('https://www.googleapis.com/youtube/v3/videos?part=snippet&key=AIzaSyD0H-vB9MILeb3nwzpoWYL96puFi_8dsCs&id='+id, function(err, res, body){
@@ -60,6 +58,7 @@ io.on('connection', function (socket) {
           url: url
         };
         queue.push(song_data);
+        console.log(queue);
         socket.broadcast.emit('update list', {queue: queue, history: history});
       })
     } else {
@@ -77,15 +76,17 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('update playing', {playing: playing});
   })
   socket.on('next song', function(data) {
-    console.log('get song!');
+    console.log('next song!');
 
     var song_data;
     if(queue.length)
       song_data = queue.shift();
-    else
+    else if(history.length)
       song_data = history.splice(Math.floor(Math.random()*history.length), 1)[0];
+    else if(playing)
+      song_data = playing;
 
-    if(playing)
+    if(playing && playing != song_data)
       history.push(playing);
     playing = song_data;
 
@@ -97,8 +98,8 @@ io.on('connection', function (socket) {
     var id = data.id;
     var index = history.map(function(d){return d.id;}).indexOf(id);
     var song_data = history.splice(index, 1)[0];
-    playing = song_data;
-    socket.broadcast.emit('get song', {playing: playing, queue: queue, history: history});
+    queue.push(song_data);
+    socket.broadcast.emit('update list', {queue: queue, history: history});
   })
 
   // Delete
