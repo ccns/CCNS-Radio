@@ -2,10 +2,11 @@
  margin-bottom: 20px;
 }
 .control.bar {
- background-color: #1FBAF1;
+ background-color: #21BCF3;
  width: 100%;
  position: fixed;
  text-align: center;
+	opacity: 0.87;
  bottom: 0;
 }
 #play {
@@ -17,4 +18,14 @@
 .plus.icon, .remove.icon {
  cursor: pointer;
  width: auto !important;
+}
+#serval {
+	position: fixed;
+	float: right;
+	right: 50px;
+	bottom: -3px;
+	z-index: -1;
+}
+#serval>img {
+	opacity: 0.6;
 }
