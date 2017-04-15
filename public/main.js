@@ -27,7 +27,7 @@ function onPlayerReady(event) {
 
 function onPlayerStateChange(event) {
   if(event.data === 0) {
-    io().emit('get song');
+    io().emit('next song');
   }
   if(event.data === 1) {
     updatePlayingByIFrame();

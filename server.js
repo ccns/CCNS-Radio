@@ -103,10 +103,15 @@ io.on('connection', function (socket) {
   })
 
   // Delete
-  socket.on('del song', function (data) {
-    console.log('del list');
+  socket.on('remove queue', function (data) {
+    console.log('del queue');
     var id = data.id;
     queue = queue.filter(function(d){return d.id!=id;});
+    socket.broadcast.emit('update list', {queue: queue, history: history});
+  })
+  socket.on('remove history', function (data) {
+    console.log('del history');
+    var id = data.id;
     history = history.filter(function(d){return d.id!=id;});
     socket.broadcast.emit('update list', {queue: queue, history: history});
   })

@@ -2,9 +2,13 @@ function plus() {
   var id = $(this).attr('yid');
   io().emit('push queue', {id: id})
 }
-function remove() {
+function removeQueue() {
   var id = $(this).attr('yid');
-  io().emit('remove song', {id: id})
+  io().emit('remove queue', {id: id})
+}
+function removeHistory() {
+  var id = $(this).attr('yid');
+  io().emit('remove history', {id: id})
 }
 function updateHistory(data) {
   var items = $("#history .ts.items").empty();
@@ -21,7 +25,7 @@ function updateHistory(data) {
     var remove_icon = $('<i/>')
       .addClass('remove icon')
       .attr('yid', d.id)
-      .click(remove)
+      .click(removeHistory)
       .appendTo(item);
     var a = $('<a/>')
       .text(d.title)
@@ -40,7 +44,7 @@ function updateQueue(data) {
     var remove_icon = $('<i/>')
       .addClass('remove icon')
       .attr('yid', d.id)
-      .click(remove)
+      .click(removeQueue)
       .appendTo(item);
     var a = $('<a/>')
       .text(d.title)
