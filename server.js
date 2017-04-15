@@ -5,14 +5,28 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 
+// Other requires
 var request = require('request');
+var path = require('path');
 
+// Start Server
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
 
+// Static folder
+app.use(express.static(path.join(__dirname+'/view')));
+
 // Routing
-app.use(express.static(__dirname + '/public'));
+app.get('/', function(req, res) {
+  res.redirect('/push');
+})
+app.get('/push', function(req, res) {
+  res.sendFile(path.join(__dirname+'/view/push.html'));
+})
+app.get('/play', function(req, res) {
+  res.sendFile(path.join(__dirname+'/view/play.html'));
+})
 
 var queue = [];
 var history = [{
@@ -22,17 +36,7 @@ var history = [{
 }];
 var playing = false;
 io.on('connection', function (socket) {
-  socket.on('get list', function (data) {
-    console.log('get list');
-    socket.broadcast.emit('update list', {queue: queue, history: history});
-  })
-  socket.on('del song', function (data) {
-    console.log('del list');
-    var id = data.id;
-    queue = queue.filter(function(d){return d.id!=id;});
-    history = history.filter(function(d){return d.id!=id;});
-    socket.broadcast.emit('update list', {queue: queue, history: history});
-  })
+  // Create
   socket.on('new song', function (data) {
     console.log('new song: '+data.id);
     var id = data.id;
@@ -63,7 +67,16 @@ io.on('connection', function (socket) {
     }
   });
 
-  socket.on('get song', function(data) {
+  // Read
+  socket.on('get list', function (data) {
+    console.log('get list');
+    socket.broadcast.emit('update list', {queue: queue, history: history});
+  })
+  socket.on('get playing', function (data) {
+    console.log('get playing');
+    socket.broadcast.emit('update playing', {playing: playing});
+  })
+  socket.on('next song', function(data) {
     console.log('get song!');
 
     var song_data;
@@ -76,14 +89,24 @@ io.on('connection', function (socket) {
       history.push(playing);
     playing = song_data;
 
-    socket.broadcast.emit('get song', {song: song_data, queue: queue, history: history});
+    socket.broadcast.emit('get song', {playing: playing, queue: queue, history: history});
   })
 
+  // Update
   socket.on('push queue', function(data) {
     var id = data.id;
     var index = history.map(function(d){return d.id;}).indexOf(id);
     var song_data = history.splice(index, 1)[0];
     playing = song_data;
-    socket.broadcast.emit('get song', {song: song_data, queue: queue, history: history});
+    socket.broadcast.emit('get song', {playing: playing, queue: queue, history: history});
+  })
+
+  // Delete
+  socket.on('del song', function (data) {
+    console.log('del list');
+    var id = data.id;
+    queue = queue.filter(function(d){return d.id!=id;});
+    history = history.filter(function(d){return d.id!=id;});
+    socket.broadcast.emit('update list', {queue: queue, history: history});
   })
 });
