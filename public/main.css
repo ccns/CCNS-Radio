@@ -19,6 +19,7 @@
  cursor: pointer;
  width: auto !important;
 }
+/*
 #serval {
 	position: fixed;
 	float: right;
@@ -26,6 +27,20 @@
 	bottom: -3px;
 	z-index: -1;
 }
+
 #serval>img {
+	opacity: 0.70;
+}
+*/
+#tohru {
+	position: relative;
+	float: right;
+	bottom: 30px;
+	z-index: -1;
+}
+
+#tohru>img.resize {
 	opacity: 0.75;
+	width: 150px;
+	height: auto;
 }
