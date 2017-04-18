@@ -8,11 +8,16 @@ var port = process.env.PORT || 3000;
 // Other requires
 var request = require('request');
 var path = require('path');
-
+var localip = require('internal-ip').v4();
 // Start Server
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
+
+// ejs init
+app.set('views', path.join(__dirname,'view'));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
 // Static folder
 app.use(express.static(path.join(__dirname+'/public')));
@@ -20,14 +25,13 @@ app.use(express.static(path.join(__dirname+'/public')));
 // Routing
 app.get('/', function(req, res) {
   if(req.ip=='::1')
-    res.sendFile(path.join(__dirname+'/view/index.html'));
+    res.render('index', {serverip: localip});//sendFile(path.join(__dirname+'/view/index.html'));
   else
     res.redirect('/client');
 })
 app.get('/client', function(req, res) {
-  res.sendFile(path.join(__dirname+'/view/index.html'));
+  res.render('index', { serverip : localip});
 })
-
 var queue = [];
 var history = [];
 var playing = false;
