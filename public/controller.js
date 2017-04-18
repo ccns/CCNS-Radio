@@ -12,7 +12,7 @@ var controller = {
         break;
     }
   },
-  setVolumn: function(value) {
+  setVolume: function(value) {
     player.setVolume(value);
     view.updateVolume(value);
   }

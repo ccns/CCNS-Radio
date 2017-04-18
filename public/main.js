@@ -57,6 +57,12 @@ $(function() {
     }
   });
 
+  // volume change
+  $("#volume").change(function() {
+    var value = $(this).val();
+    setVolume(value);
+  })
+
   // hide if client
   if(window.location.pathname == '/client') {
     $("#player").hide();

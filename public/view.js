@@ -69,7 +69,15 @@ var view = {
         .text("Nothing playing ...");
     }
   },
-  updateVolume: function() {
-    $("");
+  updateVolume: function(value) {
+    $("#volume").val(value);
+    $(".volume.icon").removeClass('down off up');
+
+    if(value == 0)
+      $(".volume.icon").addClass('off');
+    else if(value < 50)
+      $(".volume.icon").addClass('down');
+    else
+      $(".volume.icon").addClass('up');
   }
 }

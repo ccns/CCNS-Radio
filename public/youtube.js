@@ -12,6 +12,7 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
   getList();
   getPlaying();
+  getVolume();
   // mute if client
   if(window.location.pathname == '/client')
     player.mute()
