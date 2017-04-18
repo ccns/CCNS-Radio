@@ -1,18 +1,18 @@
 <!doctype html>
 <html lang="en" data-ts-native>
-	<head>
-		<meta charset="UTF-8">
-		<title>CCNS Radio</title>
-		<!-- <link rel="stylesheet" href="style.css"> -->
+  <head>
+    <meta charset="UTF-8">
+    <title>CCNS Radio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="//cdn.rawgit.com/TeaMeow/TocasUI/master/dist/tocas.min.css">
     <link rel="stylesheet" href="main.css">
-	</head>
-	<body>
+  </head>
+  <body>
     <div class="header">
       <div class="ts menu">
         <div class="ts container">
           <a class="item">CCNS Radio</a>
-					<a class="item">新增歌曲: http://<%=serverip %>:3000</a>
+          <a class="item">新增歌曲: http://<%=serverip%>:3000</a>
         </div>
       </div>
     </div>
@@ -64,8 +64,8 @@
         </div>
       </div>
     </div>
-		<!-- <div id="serval"><img src="http://imgur.com/g4t5BB6.png"/></div> -->
-		<div id="tohru"><img class="ts medium image" src="http://i.imgur.com/aLfHWUi.png"/></div>
+    <!-- <div id="serval"><img src="http://imgur.com/g4t5BB6.png"/></div> -->
+    <div id="tohru"><img class="ts medium image" src="http://i.imgur.com/aLfHWUi.png"/></div>
 
     <div class="control bar">
       <div class="ts container">
@@ -76,10 +76,20 @@
     </div>
 
 
-		<script src="https://use.fontawesome.com/b1359841fc.js"></script>
-		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="/updateList.js"></script>
-		<script src="/main.js"></script>
-	</body>
+    <!-- Libraries -->
+    <script src="https://use.fontawesome.com/b1359841fc.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script> var socket = io(); </script>
+    <script> var player; </script>
+    <!-- Functions -->
+    <script src="/socket-emit.js"></script>
+    <script src="/socket-on.js"></script>
+    <script src="/view.js"></script>
+    <script src="/controller.js"></script>
+    <script src="/youtube.js"></script>
+    <script src="/errorHandler.js"></script>
+    <!-- Scripts -->
+    <script src="/main.js"></script>
+  </body>
 </html>

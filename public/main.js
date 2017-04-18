@@ -1,72 +1,20 @@
-// Youtube
-var tag = document.createElement('script');
-
-tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-var player;
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player('player', {
-    height: '150',
-    width: '100%',
-    events: {
-      'onReady': onPlayerReady,
-      'onStateChange': onPlayerStateChange
-    }
-  });
-}
-
-function onPlayerReady(event) {
-  io().emit('get list');
-  io().emit('get playing');
-  // mute if client
-  if(window.location.pathname == '/client')
-    player.mute()
-}
-
-function onPlayerStateChange(event) {
-  if(event.data === 0) {
-    io().emit('next song');
-  }
-  if(event.data === 1) {
-    updatePlayingByIFrame();
-  }
-}
-
-function play(id) {
-  load(id);
-  player.playVideo();
-}
-
-function load(id) {
-  player.cueVideoById(id, 0, "highres");
-}
-
 $(function() {
+  // get socket after document ready
+  setSocketListeners();
+
+  // load youtube player
+  $.getScript("https://www.youtube.com/iframe_api");
+
   // next song
   $('#next').click(function(){
     player.stopVideo();
-    io().emit('next song');
+    nextSong();
   });
 
+  // Button click listeners
   // playpause
   $('#playpause').click(function(){
-    var stat = player.getPlayerState();
-    console.log(stat);
-    switch(stat) {
-      case 1:
-        player.pauseVideo();
-        break;
-      case 2:
-      case 5:
-        player.playVideo();
-        updatePlayingByIFrame();
-        break;
-      default:
-        player.stopVideo();
-        io().emit('next song');
-    }
+    controller.pausePlay();
   });
 
   // radio
@@ -92,7 +40,7 @@ $(function() {
             params['v'] = sp[0];
         })
         data.id = params['v'];
-        io().emit('new song', data);
+        newSong(data);
       } else {
         fail.push(url);
       }
@@ -105,26 +53,9 @@ $(function() {
     }
   });
 
-  // socket.io listeners
-  io().on('get song', function (data) {
-    console.log(data);
-    play(data.playing.id);
-    updateList(data);
-    // updatePlaying(data);
-  });
-  io().on('update list', function (data) {
-    console.log(data);
-    updateList(data);
-  });
-  io().on('update playing', function (data) {
-    console.log(data);
-    updatePlaying(data);
-  });
-
   // hide if client
   if(window.location.pathname == '/client') {
     $("#player").hide();
     $("#playpause").hide();
   }
-
 });
