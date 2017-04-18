@@ -12,8 +12,10 @@ function setSocketListeners() {
   });
   socket.on('update playing', function (data) {
     console.log(data);
-    view.updatePlaying(data);
-    load(data.playing.id);
+    if(data.playing) {
+      view.updatePlaying(data);
+      load(data.playing.id);
+    }
   });
   socket.on('err', function (data) {
     console.log(data);

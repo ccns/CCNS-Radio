@@ -20,9 +20,11 @@ $(function() {
   $('#radio').click(function(){
     play('12hYTyzvEMg');
     view.updatePlaying({
-      id: '12hYTyzvEMg',
-      title: '純音樂電台',
-      url: 'https://youtu.be/12hYTyzvEMg'
+      playing: {
+        id: '12hYTyzvEMg',
+        title: '純音樂電台',
+        url: 'https://youtu.be/12hYTyzvEMg'
+      }
     });
   });
 
