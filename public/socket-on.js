@@ -4,7 +4,7 @@ function setSocketListeners() {
     console.log(data);
     play(data.playing.id);
     view.updateList(data);
-    // view.updatePlaying(data);
+    view.updatePlaying(data);
   });
   socket.on('update list', function (data) {
     console.log(data);

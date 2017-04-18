@@ -21,9 +21,6 @@ function onPlayerStateChange(event) {
   if(event.data === 0) {
     nextSong();
   }
-  if(event.data === 1) {
-    view.updatePlayingByIFrame();
-  }
 }
 
 function play(id) {

@@ -51,6 +51,7 @@ var view = {
         .text(d.title)
         .attr('href', d.url)
         .attr('target', '_blank');
+      load(d.id);
     } else {
       $("#playing")
         .text("Nothing playing ...");
