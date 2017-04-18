@@ -38,6 +38,7 @@ app.get('/client', function(req, res) {
 var queue = [];
 var history = [];
 var playing = false;
+var volume = 50;
 io.on('connection', function (socket) {
   // Create
   socket.on('new song', function (data) {
@@ -90,7 +91,7 @@ io.on('connection', function (socket) {
   })
   socket.on('get playing', function (data) {
     console.log('[info]  Get playing');
-    io.emit('update playing', {playing: playing});
+    socket.emit('update playing', {playing: playing});
   })
   socket.on('next song', function(data) {
     console.log('[info]  Next song!');
@@ -109,6 +110,10 @@ io.on('connection', function (socket) {
 
     io.emit('get song', {playing: playing, queue: queue, history: history});
   })
+  socket.on('get volume', function() {
+    console.log('[info]  Get volumn');
+    socket.emit('get volume', volume);
+  });
 
   // Update
   socket.on('push queue', function(data) {
@@ -118,6 +123,11 @@ io.on('connection', function (socket) {
     queue.push(song_data);
     io.emit('update list', {queue: queue, history: history});
   })
+  socket.on('set volume', function(value) {
+    console.log('[info]  Set volumn: '+value);
+    volume = value;
+    io.emit('set volume', value);
+  });
 
   // Delete
   socket.on('remove queue', function (data) {
@@ -132,4 +142,10 @@ io.on('connection', function (socket) {
     history = history.filter(function(d){return d.id!=id;});
     io.emit('update list', {queue: queue, history: history});
   })
+
+  // Player Control
+  socket.on('pauseplay', function() {
+    console.log('[info]  Pause/Play');
+    io.emit('pauseplay');
+  });
 });

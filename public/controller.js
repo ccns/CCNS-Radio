@@ -9,11 +9,11 @@ var controller = {
       case 2:
       case 5:
         player.playVideo();
-        view.updatePlayingByIFrame();
         break;
-      default:
-        player.stopVideo();
-        nextSong();
     }
+  },
+  setVolumn: function(value) {
+    player.setVolume(value);
+    view.updateVolume(value);
   }
 }

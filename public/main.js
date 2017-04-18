@@ -7,14 +7,13 @@ $(function() {
 
   // next song
   $('#next').click(function(){
-    player.stopVideo();
     nextSong();
   });
 
   // Button click listeners
   // playpause
   $('#playpause').click(function(){
-    controller.pausePlay();
+    pausePlay();
   });
 
   // radio
@@ -61,6 +60,5 @@ $(function() {
   // hide if client
   if(window.location.pathname == '/client') {
     $("#player").hide();
-    $("#playpause").hide();
   }
 });

@@ -2,9 +2,9 @@ function setSocketListeners() {
   // socket.io listeners
   socket.on('get song', function (data) {
     console.log(data);
-    play(data.playing.id);
     view.updateList(data);
     view.updatePlaying(data);
+    play(data.playing.id);
   });
   socket.on('update list', function (data) {
     console.log(data);
@@ -13,8 +13,9 @@ function setSocketListeners() {
   socket.on('update playing', function (data) {
     console.log(data);
     view.updatePlaying(data);
+    load(data.playing.id);
   });
-  socket.on('err', function(data) {
+  socket.on('err', function (data) {
     console.log(data);
     errorHandler(data);
   })
@@ -25,5 +26,9 @@ function setSocketListeners() {
   socket.on('pauseplay', function (data) {
     console.log(data);
     controller.pausePlay(data);
+  });
+  socket.on('get volume', function (data) {
+    console.log(data);
+    controller.setVolume(data);
   });
 }
