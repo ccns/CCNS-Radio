@@ -125,6 +125,7 @@ discord.on("message", message => {
         + "/add [youtube_url] : Add a song.\n"
         + "/next : Skip current song.\n"
         + "/playpause : Play/Pause current song.\n"
+        + "/controller : Show controller.\n"
       message.channel.send(msg);
       break;
     case "say":
@@ -185,6 +186,13 @@ discord.on("message", message => {
       io.emit('pauseplay');
       message.channel.send("Wanna play/pause a song!");
       break;
+    case "controller":
+      message.channel.send("A nice controller!")
+        .then(message => {
+          message.react("⏭")
+          message.react("⏯")
+        })
+      break;
   }
 
 });
@@ -198,12 +206,10 @@ discord.on("messageReactionAdd", (messageReaction, user) => {
     case "⏭":
       var list = playlist.nextSong();
       io.emit('get song', list);
-      message.channel.send("Wanna skip a song!");
       break;
     case "⏯":
       console.log('[info]  Pause/Play');
       io.emit('pauseplay');
-      message.channel.send("Wanna play/pause a song!");
       break;
   }
 });
@@ -217,12 +223,10 @@ discord.on("messageReactionRemove", (messageReaction, user) => {
     case "⏭":
       var list = playlist.nextSong();
       io.emit('get song', list);
-      message.channel.send("Wanna skip a song!");
       break;
     case "⏯":
       console.log('[info]  Pause/Play');
       io.emit('pauseplay');
-      message.channel.send("Wanna play/pause a song!");
       break;
   }
 });
