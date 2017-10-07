@@ -195,12 +195,31 @@ discord.on("messageReactionAdd", (messageReaction, user) => {
   if(message.channel.name !== discord_channelName) return;
   var emoji = messageReaction.emoji;
   switch(emoji.name) {
-    case "next":
+    case "⏭":
       var list = playlist.nextSong();
       io.emit('get song', list);
       message.channel.send("Wanna skip a song!");
       break;
-    case "playpause":
+    case "⏯":
+      console.log('[info]  Pause/Play');
+      io.emit('pauseplay');
+      message.channel.send("Wanna play/pause a song!");
+      break;
+  }
+});
+
+discord.on("messageReactionRemove", (messageReaction, user) => {
+  var message = messageReaction.message;
+  if(user.id == discord.user.id) return;
+  if(message.channel.name !== discord_channelName) return;
+  var emoji = messageReaction.emoji;
+  switch(emoji.name) {
+    case "⏭":
+      var list = playlist.nextSong();
+      io.emit('get song', list);
+      message.channel.send("Wanna skip a song!");
+      break;
+    case "⏯":
       console.log('[info]  Pause/Play');
       io.emit('pauseplay');
       message.channel.send("Wanna play/pause a song!");
