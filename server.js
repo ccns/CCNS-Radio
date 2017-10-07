@@ -1,15 +1,29 @@
 // Setup basic express server
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var port = process.env.PORT || 3000;
-var debug = process.env.DEBUG || false;
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+const port = process.env.PORT || 3000;
 
 // Other requires
-var request = require('request');
-var path = require('path');
-var localip = require('internal-ip').v4();
+const request = require('request');
+const path = require('path');
+const localip = require('internal-ip').v4();
+const config = require('config');
+
+// Discord.js
+const discord_token = config.get('discord_token');
+const discord_prefix = config.get('discord_prefix');
+const discord_channelName = config.get('discord_channelName');
+const Discord = require('discord.js');
+const discord = new Discord.Client();
+
+// Login to discord
+discord.login(discord_token);
+
+// Init playlist
+const Playlist = require('./playlist');
+var playlist = new Playlist();
 
 // Start Server
 server.listen(port, function () {
@@ -35,112 +49,57 @@ app.get('/client', function(req, res) {
   res.render('index', {serverip: localip});
 })
 
-var queue = [];
-var history = [];
-var playing = false;
-var volume = 50;
+// Websocket
 io.on('connection', function (socket) {
   // Create
   socket.on('new song', function (data) {
-    console.log('[info]  New song: '+data.id);
     var id = data.id;
-
-    var in_queue = queue.find(function(d){return d.id==id;});
-    var in_history = history.find(function(d){return d.id==id;});
-    // playing is not empty -> playing.id!=id -> false
-    // playing is empty -> false
-    var in_playing = !(!playing || (playing.id!=id));
-    if(debug) {
-      console.log("[debug] Check if new song already exist")
-      console.log("[debug] In queue? "+in_queue);
-      console.log("[debug] In history? "+in_history);
-      console.log("[debug] In playing? "+in_playing);
-    }
-
-    if( !in_queue && !in_history && !in_playing ){
-      request('https://www.googleapis.com/youtube/v3/videos?part=snippet&key=AIzaSyD0H-vB9MILeb3nwzpoWYL96puFi_8dsCs&id='+id, function(err, res, body){
-        var body = JSON.parse(body);
-        if(body.items.length > 0) {
-          var title = body.items[0].snippet.title;
-          var url = 'https://youtu.be/'+id;
-          var song_data = {
-            id: id,
-            title: title,
-            url: url
-          };
-          queue.push(song_data);
-          if(debug) {
-            console.log("[debug] Songs in queue after pushing")
-            console.log(queue);
-          }
-          io.emit('update list', {queue: queue, history: history});
-        } else {
-          console.log("[error] Invalid Youtube video ID.");
-          socket.emit('err', {code: 1, msg: 'Invalid Youtube video ID.'})
-        }
-      })
-    } else {
-      io.emit('update list', {queue: queue, history: history});
-    }
+    playlist.newSong(id, function (list) {
+      io.emit('update list', list);
+    }, function (err) {
+      socket.emit('err', err)
+    })
   });
 
   // Read
   socket.on('get list', function (data) {
-    console.log('[info]  Get list');
+    var queue = playlist.getQueue()
+    var history = playlist.getHistory()
     io.emit('update list', {queue: queue, history: history});
   })
   socket.on('get playing', function (data) {
-    console.log('[info]  Get playing');
+    var playing = playlist.getPlaying()
     socket.emit('update playing', {playing: playing});
   })
   socket.on('next song', function(data) {
-    console.log('[info]  Next song!');
-
-    var song_data;
-    if(queue.length)
-      song_data = queue.shift();
-    else if(history.length)
-      song_data = history.splice(Math.floor(Math.random()*history.length), 1)[0];
-    else if(playing)
-      song_data = playing;
-
-    if(playing && playing != song_data)
-      history.push(playing);
-    playing = song_data;
-
-    io.emit('get song', {playing: playing, queue: queue, history: history});
+    var list = playlist.nextSong();
+    io.emit('get song', list);
   })
   socket.on('get volume', function() {
-    console.log('[info]  Get volumn');
+    var volume = playlist.getVolume();
     socket.emit('get volume', volume);
   });
 
   // Update
   socket.on('push queue', function(data) {
-    var id = data.id;
-    var index = history.map(function(d){return d.id;}).indexOf(id);
-    var song_data = history.splice(index, 1)[0];
-    queue.push(song_data);
-    io.emit('update list', {queue: queue, history: history});
+    var list = playlist.pushQueue();
+    io.emit('update list', list);
   })
   socket.on('set volume', function(value) {
-    console.log('[info]  Set volumn: '+value);
-    volume = value;
-    io.emit('set volume', value);
+    var volume = playlist.setVolume(value);
+    io.emit('set volume', volume);
   });
 
   // Delete
   socket.on('remove queue', function (data) {
-    console.log('[info]  Del queue: '+data.id);
     var id = data.id;
-    queue = queue.filter(function(d){return d.id!=id;});
-    io.emit('update list', {queue: queue, history: history});
+    var list = playlist.removeQueue();
+    io.emit('update list', list);
   })
   socket.on('remove history', function (data) {
-    console.log('[info]  Del history: '+data.id);
     var id = data.id;
-    history = history.filter(function(d){return d.id!=id;});
-    io.emit('update list', {queue: queue, history: history});
+    var list = playlist.removeHistory(id);
+    io.emit('update list', list);
   })
 
   // Player Control
@@ -148,4 +107,103 @@ io.on('connection', function (socket) {
     console.log('[info]  Pause/Play');
     io.emit('pauseplay');
   });
+});
+
+// Discord
+discord.on("message", message => {
+  if(message.author.bot) return;
+  if(message.channel.name !== discord_channelName) return;
+  if(message.content.indexOf(discord_prefix) !== 0) return;
+
+  const args = message.content.slice(discord_prefix.length).trim().split(/ +/g);
+  const command = args.shift().toLowerCase();
+
+  switch(command) {
+    case "help":
+      var msg = "[Command list]\n"
+        + "/playing : Get information of currently playing song. \n"
+        + "/add [youtube_url] : Add a song.\n"
+        + "/next : Skip current song.\n"
+        + "/playpause : Play/Pause current song.\n"
+      message.channel.send(msg);
+      break;
+    case "say":
+      var msg = args.join(" ");
+      message.delete().catch(O_o=>{});
+      message.channel.send(msg);
+      break;
+    case "playing":
+      var playing = playlist.getPlaying()
+      if(playing) {
+        var msg = playing.title+"\n"
+                + playing.url;
+        message.channel.send(msg);
+        break;
+      } else {
+        message.channel.send("Nothing playing.");
+        break;
+      }
+    case "add":
+      var url = args[0];
+      if(url == "") {
+        message.channel.send("Nothing to play!");
+        break;
+      }
+      var match = url.match(/(youtube.com|youtu.be)\/(watch\?)?(\S+)/);
+      if(match) {
+        var data = {};
+        var params = {};
+        match[3].split("&").map(function(d) {
+          var sp = d.split("=");
+          if(sp.length == 2)
+            params[sp[0]] = sp[1];
+          else
+            params['v'] = sp[0];
+        })
+        var id = params['v'];
+        playlist.newSong(id, function (list) {
+          var song = list.queue[0];
+          var msg = song.title+"\n"
+                  + song.url;
+          message.channel.send(msg);
+          io.emit('update list', list);
+        }, function (err) {
+          message.channel.send("Things gets crazy!");
+        })
+        break;
+      } else {
+        message.channel.send("Invalid Youtube url!");
+        break;
+      }
+    case "next":
+      var list = playlist.nextSong();
+      io.emit('get song', list);
+      message.channel.send("Wanna skip a song!");
+      break;
+    case "playpause":
+      console.log('[info]  Pause/Play');
+      io.emit('pauseplay');
+      message.channel.send("Wanna play/pause a song!");
+      break;
+  }
+
+});
+
+discord.on("messageReactionAdd", (messageReaction, user) => {
+  var message = messageReaction.message;
+  if(user.id == discord.user.id) return;
+  if(message.channel.name !== discord_channelName) return;
+  var emoji = messageReaction.emoji;
+  switch(emoji.name) {
+    case "next":
+      var list = playlist.nextSong();
+      io.emit('get song', list);
+      message.channel.send("Wanna skip a song!");
+      break;
+    case "playpause":
+      console.log('[info]  Pause/Play');
+      io.emit('pauseplay');
+      message.channel.send("Wanna play/pause a song!");
+      break;
+  }
 });

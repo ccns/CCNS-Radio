@@ -18,12 +18,12 @@ $(function() {
 
   // radio
   $('#radio').click(function(){
-    play('12hYTyzvEMg');
+    play('xkMdLcB_vNU');
     view.updatePlaying({
       playing: {
-        id: '12hYTyzvEMg',
-        title: '純音樂電台',
-        url: 'https://youtu.be/12hYTyzvEMg'
+        id: 'xkMdLcB_vNU',
+        title: 'ようこそジャパリパークへ',
+        url: 'https://youtu.be/xkMdLcB_vNU'
       }
     });
   });

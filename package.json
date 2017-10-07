@@ -4,16 +4,19 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "nodeom server.js",
+    "test": "nodemon server.js",
     "start": "node server.js"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "config": "^1.26.2",
+    "discord.js": "^11.2.1",
+    "ejs": "^2.5.6",
     "express": "^4.15.2",
     "internal-ip": "^1.2.0",
+    "node-opus": "^0.2.7",
     "request": "^2.81.0",
-    "socket.io": "^1.7.3",
-    "ejs": "^2.5.6"
+    "socket.io": "^1.7.3"
   }
 }
