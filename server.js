@@ -27,7 +27,7 @@ var playlist = new Playlist();
 
 // Start Server
 server.listen(port, function () {
-  console.log('Server listening at port %d', port);
+	console.log('Server listening at port %d', port);
 });
 
 // ejs init
@@ -40,26 +40,26 @@ app.use(express.static(path.join(__dirname+'/public')));
 
 // Routing
 app.get('/', function(req, res) {
-  if(req.ip=='::1')
-    res.render('index', {serverip: localip});//sendFile(path.join(__dirname+'/view/index.html'));
-  else
-    res.redirect('/client');
+	if(req.ip=='::1')
+		res.render('index', {serverip: localip});//sendFile(path.join(__dirname+'/view/index.html'));
+	else
+		res.redirect('/client');
 })
 app.get('/client', function(req, res) {
-  res.render('index', {serverip: localip});
+	res.render('index', {serverip: localip});
 })
 
 // Websocket
 io.on('connection', function (socket) {
-  // Create
-  socket.on('new song', function (data) {
-    var id = data.id;
-    playlist.newSong(id, function (list) {
-      io.emit('update list', list);
-    }, function (err) {
-      socket.emit('err', err)
-    })
-  });
+	// Create
+	socket.on('new song', function (data) {
+		var id = data.id;
+		playlist.newSong(id, function (list) {
+			io.emit('update list', list);
+		}, function (err) {
+			socket.emit('err', err)
+		})
+	});
 	socket.on('new list', function (data) {
 		var id = data.id;
 		playlist.newList(id, function (list) {
@@ -69,103 +69,104 @@ io.on('connection', function (socket) {
 		})
 	});
 
-  // Read
-  socket.on('get list', function (data) {
-    var queue = playlist.getQueue()
-    var history = playlist.getHistory()
-    io.emit('update list', {queue: queue, history: history});
-  })
-  socket.on('get playing', function (data) {
-    var playing = playlist.getPlaying()
-    socket.emit('update playing', {playing: playing});
-  })
-  socket.on('next song', function(data) {
-    var list = playlist.nextSong();
-    io.emit('get song', list);
-  })
-  socket.on('get volume', function() {
-    var volume = playlist.getVolume();
-    socket.emit('get volume', volume);
-  });
+	// Read
+	socket.on('get list', function (data) {
+		var queue = playlist.getQueue()
+		var history = playlist.getHistory()
+		io.emit('update list', {queue: queue, history: history});
+	})
+	socket.on('get playing', function (data) {
+		var playing = playlist.getPlaying()
+		socket.emit('update playing', {playing: playing});
+	})
+	socket.on('next song', function(data) {
+		var list = playlist.nextSong();
+		io.emit('get song', list);
+	})
+	socket.on('get volume', function() {
+		var volume = playlist.getVolume();
+		socket.emit('get volume', volume);
+	});
 
-  // Update
-  socket.on('push queue', function(data) {
+	// Update
+	socket.on('push queue', function(data) {
 		var id = data.id;
-    var list = playlist.pushQueue(id);
-    io.emit('update list', list);
-  })
-  socket.on('set volume', function(value) {
-    var volume = playlist.setVolume(value);
-    io.emit('set volume', volume);
-  });
+		var list = playlist.pushQueue(id);
+		io.emit('update list', list);
+	})
+	socket.on('set volume', function(value) {
+		var volume = playlist.setVolume(value);
+		io.emit('set volume', volume);
+	});
 
-  // Delete
-  socket.on('remove queue', function (data) {
-    var id = data.id;
-    var list = playlist.removeQueue(id);
-    io.emit('update list', list);
-  })
-  socket.on('remove history', function (data) {
-    var id = data.id;
-    var list = playlist.removeHistory(id);
-    io.emit('update list', list);
-  })
+	// Delete
+	socket.on('remove queue', function (data) {
+		var id = data.id;
+		var list = playlist.removeQueue(id);
+		io.emit('update list', list);
+	})
+	socket.on('remove history', function (data) {
+		var id = data.id;
+		var list = playlist.removeHistory(id);
+		io.emit('update list', list);
+	})
 
-  // Player Control
-  socket.on('pauseplay', function() {
-    console.log('[info]  Pause/Play');
-    io.emit('pauseplay');
-  });
+	// Player Control
+	socket.on('pauseplay', function() {
+		console.log('[info]  Pause/Play');
+		io.emit('pauseplay');
+	});
 });
 
 // Discord
 discord.on("message", message => {
-  if(message.author.bot) return;
-  if(message.channel.name !== discord_channelName) return;
-  if(message.content.indexOf(discord_prefix) !== 0) return;
+	if(message.author.bot) return;
+	if(message.channel.name !== discord_channelName) return;
+	if(message.content.indexOf(discord_prefix) !== 0) return;
 
-  const args = message.content.slice(discord_prefix.length).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
+	const args = message.content.slice(discord_prefix.length).trim().split(/ +/g);
+	const command = args.shift().toLowerCase();
 
-  switch(command) {
-    case "help":
-      var msg = "[Command list]\n"
-        + "/playing : Get information of currently playing song. \n"
-        + "/add [youtube_url] : Add a song.\n"
-        + "/next : Skip current song.\n"
-        + "/playpause : Play/Pause current song.\n"
-        + "/controller : Show controller.\n"
-      message.channel.send(msg);
-      break;
-    case "say":
-      var msg = args.join(" ");
-      message.delete().catch(O_o=>{});
-      message.channel.send(msg);
-      break;
-    case "playing":
-      var playing = playlist.getPlaying()
-      if(playing) {
-        var msg = playing.title+"\n"
-                + playing.url;
-        message.channel.send(msg);
-        break;
-      } else {
-        message.channel.send("Nothing playing.");
-        break;
-      }
-    case "add":
-      var url = args[0];
-      if(url == "") {
-        message.channel.send("Nothing to play!");
-        break;
-      }
-      var match = url.match(/(youtube.com|youtu.be)\/(watch\?)?(\S+)/);
+	switch(command) {
+		case "help":
+			var msg = "[Command list]\n"
+				+ "/playing : Get information of currently playing song. \n"
+				+ "/add [youtube_url] : Add a song.\n"
+				+ "/next : Skip current song.\n"
+				+ "/playpause : Play/Pause current song.\n"
+				+ "/controller : Show controller.\n"
+			message.channel.send(msg);
+			break;
+		case "say":
+			var msg = args.join(" ");
+			message.delete().catch(O_o=>{});
+			message.channel.send(msg);
+			break;
+		case "playing":
+			var playing = playlist.getPlaying()
+			if(playing) {
+				var msg = playing.title+"\n"
+					+ playing.url;
+				message.channel.send(msg);
+				break;
+			} else {
+				message.channel.send("Nothing playing.");
+				break;
+			}
+		case "add":
+			var url = args[0];
+			if(url == "") {
+				message.channel.send("Nothing to play!");
+				break;
+			}
+			var match = url.match(/(youtube.com|youtu.be)\/(watch\?)?(\S+)/);
 			var playlist_match = url.match(/(youtube.com|youtu.be)\/(playlist\?)(\S+)/);
 			if(playlist_match) {
+				message.channel.send("Playlist:");
 				var params = {}
 				playlist_match[3].split("&").map(function(d) {
-          var sp = d.split("=");
-          params[sp[0]] = sp[1];
+					var sp = d.split("=");
+					params[sp[0]] = sp[1];
 				})
 				var id = params['list'];
 				playlist.newList(id, function (list) {
@@ -178,82 +179,80 @@ discord.on("message", message => {
 				}, function (err){
 					message.channel.send("Playlist has been corrupted");
 				})
+			} else if(match) {
+				var params = {};
+				match[3].split("&").map(function(d) {
+					var sp = d.split("=");
+					if(sp.length == 2)
+						params[sp[0]] = sp[1];
+					else
+						params['v'] = sp[0];
+				})
+				var id = params['v'];
+				playlist.newSong(id, function (list) {
+					var song = list.queue[list.queue.length-1];
+					var msg = song.title+"\n"
+						+ '<' + song.url + '>' ;
+					message.channel.send(msg);
+					io.emit('update list', list);
+				}, function (err) {
+					message.channel.send("Things gets crazy!");
+				})
+			} else {
+				message.channel.send("Invalid Youtube url!");
 			}
-			else if(match) {
-        var params = {};
-        match[3].split("&").map(function(d) {
-          var sp = d.split("=");
-          if(sp.length == 2)
-            params[sp[0]] = sp[1];
-          else
-            params['v'] = sp[0];
-        })
-        var id = params['v'];
-        playlist.newSong(id, function (list) {
-          var song = list.queue[0];
-          var msg = song.title+"\n"
-                  + song.url;
-          message.channel.send(msg);
-          io.emit('update list', list);
-        }, function (err) {
-          message.channel.send("Things gets crazy!");
-        })
-        break;
-      } else {
-        message.channel.send("Invalid Youtube url!");
-        break;
-      }
-    case "next":
-      var list = playlist.nextSong();
-      io.emit('get song', list);
-      message.channel.send("Wanna skip a song!");
-      break;
-    case "playpause":
-      console.log('[info]  Pause/Play');
-      io.emit('pauseplay');
-      message.channel.send("Wanna play/pause a song!");
-      break;
-    case "controller":
-      message.channel.send("A nice controller!")
-        .then(message => {
-          message.react("⏭")
-          message.react("⏯")
-        })
-      break;
-  }
+			break;
+		case "next":
+			var list = playlist.nextSong();
+			io.emit('get song', list);
+			message.channel.send("Wanna skip a song!");
+			break;
+		case "playpause":
+			console.log('[info]  Pause/Play');
+			io.emit('pauseplay');
+			message.channel.send("Wanna play/pause a song!");
+			break;
+		case "controller":
+			message.channel.send("A nice controller!")
+				.then(message => {
+					message.react("⏭")
+					message.react("⏯")
+				})
+			break;
+	}
 
 });
 
 discord.on("messageReactionAdd", (messageReaction, user) => {
-  var message = messageReaction.message;
-  if(user.id == discord.user.id) return;
-  if(message.channel.name !== discord_channelName) return;
-  var emoji = messageReaction.emoji;
-  switch(emoji.name) {
-    case "⏭":
-      var list = playlist.nextSong();
-      io.emit('get song', list);
-      break;
-    case "⏯":
-      console.log('[info]  Pause/Play');
-      io.emit('pauseplay');
-      break;
-  }
+	var message = messageReaction.message;
+	if(user.id == discord.user.id) return;
+	if(message.channel.name !== discord_channelName) return;
+	var emoji = messageReaction.emoji;
+	switch(emoji.name) {
+		case "⏭":
+			var list = playlist.nextSong();
+			io.emit('get song', list);
+			break;
+		case "⏯":
+			console.log('[info]  Pause/Play');
+			io.emit('pauseplay');
+			break;
+	}
 });
 
 discord.on("messageReactionRemove", (messageReaction, user) => {
-  var message = messageReaction.message;
-  if(user.id == discord.user.id) return;
-  if(message.channel.name !== discord_channelName) return;
-  var emoji = messageReaction.emoji;
-  switch(emoji.name) {
-    case "⏭":
-      var list = playlist.nextSong();
-      io.emit('get song', list);
-      break;
-    case "⏯":
-      console.log('[info]  Pause/Play');
-      io.emit('pauseplay');
-      break;
-  }
+	var message = messageReaction.message;
+	if(user.id == discord.user.id) return;
+	if(message.channel.name !== discord_channelName) return;
+	var emoji = messageReaction.emoji;
+	switch(emoji.name) {
+		case "⏭":
+			var list = playlist.nextSong();
+			io.emit('get song', list);
+			break;
+		case "⏯":
+			console.log('[info]  Pause/Play');
+			io.emit('pauseplay');
+			break;
+	}
 });
