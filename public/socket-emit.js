@@ -19,6 +19,9 @@ function getPlaying() {
 function newSong(data) {
   socket.emit('new song', data);
 }
+function newList(data) {
+	socket.emit('new list', data);
+}
 function setVolume(value) {
   socket.emit('set volume', value);
 }

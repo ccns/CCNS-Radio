@@ -60,6 +60,14 @@ io.on('connection', function (socket) {
       socket.emit('err', err)
     })
   });
+	socket.on('new list', function (data) {
+		var id = data.id;
+		playlist.newList(id, function (list) {
+			io.emit('update list', list);
+		}, function (err) {
+			socket.emit ('err', err)
+		})
+	});
 
   // Read
   socket.on('get list', function (data) {
@@ -82,7 +90,8 @@ io.on('connection', function (socket) {
 
   // Update
   socket.on('push queue', function(data) {
-    var list = playlist.pushQueue();
+		var id = data.id;
+    var list = playlist.pushQueue(id);
     io.emit('update list', list);
   })
   socket.on('set volume', function(value) {
@@ -93,7 +102,7 @@ io.on('connection', function (socket) {
   // Delete
   socket.on('remove queue', function (data) {
     var id = data.id;
-    var list = playlist.removeQueue();
+    var list = playlist.removeQueue(id);
     io.emit('update list', list);
   })
   socket.on('remove history', function (data) {
@@ -151,8 +160,26 @@ discord.on("message", message => {
         break;
       }
       var match = url.match(/(youtube.com|youtu.be)\/(watch\?)?(\S+)/);
-      if(match) {
-        var data = {};
+			var playlist_match = url.match(/(youtube.com|youtu.be)\/(playlist\?)(\S+)/);
+			if(playlist_match) {
+				var params = {}
+				playlist_match[3].split("&").map(function(d) {
+          var sp = d.split("=");
+          params[sp[0]] = sp[1];
+				})
+				var id = params['list'];
+				playlist.newList(id, function (list) {
+					if(list.title !== undefined) {
+						var title = list.title;
+						title.forEach(function (t){
+							message.channel.send(t)
+						});
+					}
+				}, function (err){
+					message.channel.send("Playlist has been corrupted");
+				})
+			}
+			else if(match) {
         var params = {};
         match[3].split("&").map(function(d) {
           var sp = d.split("=");

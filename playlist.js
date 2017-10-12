@@ -1,6 +1,6 @@
 const request = require('request');
 
-const debug = true;
+const debug = process.env.DEBUG;
 
 function Playlist() {
   this.queue = [];
@@ -53,6 +53,27 @@ Playlist.prototype.newSong = function(id, callback, error) {
   }
 }
 
+Playlist.prototype.newList = function(id, callback, error) {
+  console.log('[info]  New list: '+id);
+	var self = this;
+  request('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&key=AIzaSyD0H-vB9MILeb3nwzpoWYL96puFi_8dsCs&playlistId='+id, function(err, res, body) {
+		var body = JSON.parse(body);
+		try {
+			var title = []
+			var len = body.items.length;
+			console.log("[info]  List length: "+len);
+			body.items.forEach(function (item) {
+				self.newSong(item.snippet.resourceId.videoId, callback, error);
+				title.push(item.snippet.title);
+			});
+    	callback({queue: self.queue, history: self.history, title: title})
+		} catch(err) {
+			console.log("[error] Invalid Youtube list ID.");
+			error({code: 1, msg: 'Invalid Youtube list ID.'});
+		}
+	});
+}
+
 // Read
 Playlist.prototype.getQueue = function() {
   console.log('[info]  Get Queue');
@@ -95,18 +116,18 @@ Playlist.prototype.pushQueue = function(id, callback) {
   return {queue: this.queue, history: this.history};
 }
 Playlist.prototype.setVolume = function(val) {
-  console.log('[info]  Set volumn: '+val);
+  console.log('[info]  Set volume: '+val);
   this.volume = val;
   return this.volume;
 }
 
 // Delete
-Playlist.prototype.delQueue = function(id) {
+Playlist.prototype.removeQueue = function(id) {
   console.log('[info]  Del queue: '+id);
   this.queue = this.queue.filter(function(d){return d.id!=id;});
   return {queue: this.queue, history: this.history};
 }
-Playlist.prototype.delHistory = function(id) {
+Playlist.prototype.removeHistory = function(id) {
   console.log('[info]  Del history: '+id);
   this.history = this.history.filter(function(d){return d.id!=id;});
   return {queue: this.queue, history: this.history};
