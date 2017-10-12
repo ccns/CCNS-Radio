@@ -213,11 +213,7 @@ discord.on("message", message => {
 			message.channel.send("Wanna play/pause a song!");
 			break;
 		case "controller":
-			message.channel.send("A nice controller!")
-				.then(message => {
-					message.react("⏭")
-					message.react("⏯")
-				})
+			(message.react("⏯")).then(() => message.react("⏭"))
 			break;
 	}
 
