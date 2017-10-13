@@ -40,7 +40,7 @@ app.use(express.static(path.join(__dirname+'/public')));
 
 // Routing
 app.get('/', function(req, res) {
-	if(req.ip=='::1')
+    if(/127.0.0.1|::1/.test(req.ip)) // in ipv6 localhost look like `::ffff:127.0.0.1`
 		res.render('index', {serverip: localip});//sendFile(path.join(__dirname+'/view/index.html'));
 	else
 		res.redirect('/client');
