@@ -42,7 +42,6 @@ Playlist.prototype.newSong = function(id, callback, error) {
           console.log("[debug] Songs in queue after pushing")
           console.log(self.queue);
         }
-        console.log("%s", id)
         callback({queue: self.queue, history: self.history})
       } else {
         console.log("[error] Invalid Youtube video ID.");
@@ -55,36 +54,31 @@ Playlist.prototype.newSong = function(id, callback, error) {
 }
 
 Playlist.prototype.newList = function(id, callback, error) {
-  console.log('[info]  New list: '+id);
-	var self = this;
+  console.log('[info]  New list: '+id)
+	var self = this
   request('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&key=AIzaSyD0H-vB9MILeb3nwzpoWYL96puFi_8dsCs&playlistId='+id, function(err, res, body) {
-		var body = JSON.parse(body);
-		function recurElseList(list, callback) {
-			if (list.length == 0) return
+		var body = JSON.parse(body)
+		function recurElseList(items, callback) {
+			if (items.length == 0) return
 			else {
-				var item = list[0]
+				var item = items[0]
 				self.newSong(item.snippet.resourceId.videoId, newCallback, error)
 				title.push(item.snippet.title)
 			}
-			function newCallback() {
-				callback.apply(this, arguments)
-				recurElseList(list.slice(1), callback)
+			function newCallback(list) {
+				callback(list)
+				recurElseList(items.slice(1), callback)
 			}
 		}
 		try {
 			var title = []
-			var len = body.items.length;
-			console.log("[info]  List length: "+len);
+			var len = body.items.length
+			console.log("[info]  List length: "+len)
 			recurElseList(body.items, callback)
-
-			// body.items.forEach(function (item) {
-			// 	self.newSong(item.snippet.resourceId.videoId, callback, error);
-			// 	title.push(item.snippet.title);
-			// });
     	callback({queue: self.queue, history: self.history, title: title})
 		} catch(err) {
-			console.log("[error] Invalid Youtube list ID.");
-			error({code: 1, msg: 'Invalid Youtube list ID.'});
+			console.log("[error] Invalid Youtube list ID.")
+			error({code: 1, msg: 'Invalid Youtube list ID.'})
 		}
 	});
 }
