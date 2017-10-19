@@ -8,7 +8,6 @@ var view = {
         .appendTo(items);
       var plus_icon = $('<i/>')
         .addClass('plus icon')
-        .css('box-sizing', 'content-box')
         .click(plus.bind(this, d.id))
         .appendTo(item);
       var remove_icon = $('<i/>')
