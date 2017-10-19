@@ -115,6 +115,12 @@ Playlist.prototype.nextSong = function() {
 
   return {playing: this.playing, queue: this.queue, history: this.history};
 }
+Playlist.prototype.setSong = function(id) {
+	console.log('[info]  Set song: '+id);
+  if(this.playing) this.history.push(this.playing);
+	this.playing = this.queue.filter(function(d){return d.id==id;})[0];
+	return {playing: this.playing};
+}
 
 // Update
 Playlist.prototype.pushQueue = function(id, callback) {

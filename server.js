@@ -98,6 +98,13 @@ io.on('connection', function (socket) {
 		var volume = playlist.setVolume(value);
 		io.emit('set volume', volume);
 	});
+	socket.on('set playing', function(data) {
+		var id = data.id;
+		var playing = playlist.setSong(id);
+		var list = playlist.removeQueue(id);
+		io.emit('update list', list);
+		io.emit('set song', playing);
+	});
 
 	// Delete
 	socket.on('remove queue', function (data) {

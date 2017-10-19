@@ -1,11 +1,14 @@
 function plus(id) {
-  socket.emit('push queue', {id: id})
+  socket.emit('push queue', {id: id});
 }
 function removeQueue(id) {
-  socket.emit('remove queue', {id: id})
+  socket.emit('remove queue', {id: id});
 }
 function removeHistory(id) {
-  socket.emit('remove history', {id: id})
+  socket.emit('remove history', {id: id});
+}
+function setPlaying(id) {
+	socket.emit('set playing', {id: id});
 }
 function nextSong() {
   socket.emit('next song');
