@@ -55,32 +55,32 @@ Playlist.prototype.newSong = function(id, callback, error) {
 
 Playlist.prototype.newList = function(id, callback, error) {
   console.log('[info]  New list: '+id)
-	var self = this
+  var self = this
   request('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&key=AIzaSyD0H-vB9MILeb3nwzpoWYL96puFi_8dsCs&playlistId='+id, function(err, res, body) {
-		var body = JSON.parse(body)
-		function recurElseList(items, callback) {
-			if (items.length == 0) return
-			else {
-				var item = items[0]
-				self.newSong(item.snippet.resourceId.videoId, newCallback, error)
-				title.push(item.snippet.title)
-			}
-			function newCallback(list) {
-				callback(list)
-				recurElseList(items.slice(1), callback)
-			}
-		}
-		try {
-			var title = []
-			var len = body.items.length
-			console.log("[info]  List length: "+len)
-			recurElseList(body.items, callback)
-    	callback({queue: self.queue, history: self.history, title: title})
-		} catch(err) {
-			console.log("[error] Invalid Youtube list ID.")
-			error({code: 1, msg: 'Invalid Youtube list ID.'})
-		}
-	});
+    var body = JSON.parse(body)
+    function recurElseList(items, callback) {
+      if (items.length == 0) return
+      else {
+        var item = items[0]
+        self.newSong(item.snippet.resourceId.videoId, newCallback, error)
+        title.push(item.snippet.title)
+      }
+      function newCallback(list) {
+        callback(list)
+        recurElseList(items.slice(1), callback)
+      }
+    }
+    try {
+      var title = []
+      var len = body.items.length
+      console.log("[info]  List length: "+len)
+      recurElseList(body.items, callback)
+      callback({queue: self.queue, history: self.history, title: title})
+    } catch(err) {
+      console.log("[error] Invalid Youtube list ID.")
+      error({code: 1, msg: 'Invalid Youtube list ID.'})
+    }
+  });
 }
 
 // Read
@@ -116,10 +116,10 @@ Playlist.prototype.nextSong = function() {
   return {playing: this.playing, queue: this.queue, history: this.history};
 }
 Playlist.prototype.setSong = function(id) {
-	console.log('[info]  Set song: '+id);
+  console.log('[info]  Set song: '+id);
   if(this.playing) this.history.push(this.playing);
-	this.playing = this.queue.filter(function(d){return d.id==id;})[0];
-	return {playing: this.playing};
+  this.playing = this.queue.filter(function(d){return d.id==id;})[0];
+  return {playing: this.playing};
 }
 
 // Update
