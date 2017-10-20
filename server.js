@@ -223,8 +223,8 @@ discord.on("message", message => {
 			Promise.resolve()
 				.then(() => message.react("⏯"))
 				.then(() => message.react("⏭"))
-				.then(() => message.react("➕"))
 				.then(() => message.react("➖"))
+				.then(() => message.react("➕"))
 			break;
 	}
 
@@ -247,16 +247,22 @@ discord.on("messageReactionAdd", (messageReaction, user) => {
 			io.emit('pauseplay');
 			break;
 		case "➕":
-			console.log('[info]  Volume up');
-			volume += volumeTic
-			playlist.setVolume(volume)
-			io.emit('set volume', volume);
+			if(volume >= 100) console.log('[warning] Volume bound');
+			else {
+				console.log('[info]  Volume up');
+				volume += volumeTic
+				playlist.setVolume(volume)
+				io.emit('set volume', volume);
+			}
 			break;
 		case "➖":
-			console.log('[info]  Volume down');
-			volume -= volumeTic
-			playlist.setVolume(volume)
-			io.emit('set volume', volume);
+			if(volume <= 0) console.log('[warning] Volume bound');
+			else {
+				console.log('[info]  Volume down');
+				volume -= volumeTic
+				playlist.setVolume(volume)
+				io.emit('set volume', volume);
+			}
 			break;
 	}
 });
@@ -278,16 +284,22 @@ discord.on("messageReactionRemove", (messageReaction, user) => {
 			io.emit('pauseplay');
 			break;
 		case "➕":
-			console.log('[info]  Volume up');
-			volume += volumeTic
-			playlist.setVolume(volume)
-			io.emit('set volume', volume);
+			if(volume >= 100) console.log('[warning] Volume bound');
+			else {
+				console.log('[info]  Volume up');
+				volume += volumeTic
+				playlist.setVolume(volume)
+				io.emit('set volume', volume);
+			}
 			break;
 		case "➖":
-			console.log('[info]  Volume down');
-			volume -= volumeTic
-	    playlist.setVolume(volume)
-			io.emit('set volume', volume);
+			if(volume <= 0) console.log('[warning] Volume bound');
+			else {
+				console.log('[info]  Volume down');
+				volume -= volumeTic
+	  	  playlist.setVolume(volume)
+				io.emit('set volume', volume);
+			}
 			break;
 	}
 });
