@@ -1,3 +1,6 @@
+.body {
+ padding-bottom: 80px;
+}
 .header {
  margin-bottom: 20px;
 }
@@ -8,6 +11,7 @@
  text-align: center;
 	opacity: 0.87;
  bottom: 0;
+ z-index: 6;
 }
 #play {
  margin-bottom: 20px;
@@ -15,9 +19,9 @@
 .request .ts.form .field {
  margin-bottom: 10px;
 }
-.plus.icon, .remove.icon, .angle.double.left.icon {
+.songlist .ts.items button {
+ margin-right: 5px !important;
  cursor: pointer;
- width: auto !important;
 }
 /*
 #serval {
@@ -31,7 +35,7 @@
 	opacity: 0.6;
 }
 */
-#tohru {
+/* #tohru {
 	float: right;
 	right: 30px;
 	z-index: 1;
@@ -40,10 +44,30 @@
 }
 #tohru>img {
 	opacity: 0.9;
+} */
+#kanban {
+	float: right;
+	right: 30px;
+	z-index: 666;
+	bottom: 22px;
+	position: fixed;
+}
+#kanban>img {
+	opacity: 0.9;
+}
+.control.bar button {
+ vertical-align: middle;
+}
+.volume-controller {
+ display: inline-block;
+ height: 40px;
+ vertical-align: middle;
 }
 .volume-bar {
  display: inline-block;
  width: 150px;
+ padding: 8px;
+ vertical-align: middle;
 }
 .volume.icon {
  color: white;

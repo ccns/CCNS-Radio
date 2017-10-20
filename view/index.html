@@ -3,9 +3,18 @@
   <head>
     <meta charset="UTF-8">
     <title>CCNS Radio</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+
+    <!-- 舊的 Tocas UI -->
     <!-- <link rel="stylesheet" href="//cdn.rawgit.com/TeaMeow/TocasUI/master/dist/tocas.min.css"> -->
-    <link rel="stylesheet" href="//cdn.rawgit.com/TeaMeow/TocasUI/2.3.1/dist/tocas.css">
+    <!-- <link rel="stylesheet" href="//cdn.rawgit.com/TeaMeow/TocasUI/2.3.1/dist/tocas.css"> -->
+
+    <!-- Tocas UI：CSS 與元件 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css">
+    <!-- Tocas JS：模塊與 JavaScript 函式 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.js"></script>
+
+    <!-- 主要的 CSS -->
     <link rel="stylesheet" href="main.css">
   </head>
   <body>
@@ -21,7 +30,7 @@
 
     <div class="body">
       <div class="ts container">
-        <div class="ts grid">
+        <div class="ts stackable grid">
           <div class="four wide column">
             <div id="play">
               <h3>Now Playing</h3>
@@ -41,9 +50,10 @@
 
           <div class="six wide column">
             <h3>Queue</h3>
-            <div id="queue">
+            <div id="queue" class="songlist">
               <div class="ts items">
                 <!-- <div class="ts item"> -->
+                <!--   <i class="angle double left icon"></i> -->
                 <!--   <i class="remove icon"></i> -->
                 <!--   <a>Song in queue.</a> -->
                 <!-- </div> -->
@@ -53,7 +63,7 @@
 
           <div class="six wide column">
             <h3>History</h3>
-            <div id="history">
+            <div id="history" class="songlist">
               <div class="ts items">
                 <!-- <div class="ts item"> -->
                 <!--   <i class="plus icon"></i> -->
@@ -74,10 +84,12 @@
         <button id="radio" class="ts primary button">JAPARI</button>
         <button id="playpause" class="ts primary button">播放/暫停</button>
         <button id="next" class="ts primary button">下一首</button>
-        <i class="volume up icon"></i>
-        <div class="volume-bar">
-          <div class="ts fluid slider">
-            <input type="range" id="volume">
+        <div class="volume-controller">
+          <i class="volume up icon"></i>
+          <div class="volume-bar">
+            <div class="ts fluid slider">
+              <input type="range" id="volume">
+            </div>
           </div>
         </div>
       </div>
