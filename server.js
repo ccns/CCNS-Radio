@@ -220,10 +220,11 @@ discord.on("message", message => {
 			message.channel.send("Wanna play/pause a song!");
 			break;
 		case "controller":
-			message.react("⏯")
-			message.react("⏭")
-			message.react("➕")
-			message.react("➖")
+			Promise.resolve()
+				.then(() => message.react("⏯"))
+				.then(() => message.react("⏭"))
+				.then(() => message.react("➕"))
+				.then(() => message.react("➖"))
 			break;
 	}
 
@@ -234,8 +235,8 @@ discord.on("messageReactionAdd", (messageReaction, user) => {
 	if(user.id == discord.user.id) return;
 	if(message.channel.name !== discord_channelName) return;
 	var emoji = messageReaction.emoji;
-	var volume = playlist.getVolume()
-	var volumeTic = 5
+	var volume = Number(playlist.getVolume())
+	var volumeTic = 3
 	switch(emoji.name) {
 		case "⏭":
 			var list = playlist.nextSong();
@@ -252,7 +253,7 @@ discord.on("messageReactionAdd", (messageReaction, user) => {
 			io.emit('set volume', volume);
 			break;
 		case "➖":
-			console.log('[info]  Volume up');
+			console.log('[info]  Volume down');
 			volume -= volumeTic
 			playlist.setVolume(volume)
 			io.emit('set volume', volume);
@@ -265,8 +266,8 @@ discord.on("messageReactionRemove", (messageReaction, user) => {
 	if(user.id == discord.user.id) return;
 	if(message.channel.name !== discord_channelName) return;
 	var emoji = messageReaction.emoji;
-	var volume = playlist.getVolume()
-	var volumeTic = 5
+	var volume = Number(playlist.getVolume())
+	var volumeTic = 3
 	switch(emoji.name) {
 		case "⏭":
 			var list = playlist.nextSong();
@@ -283,9 +284,9 @@ discord.on("messageReactionRemove", (messageReaction, user) => {
 			io.emit('set volume', volume);
 			break;
 		case "➖":
-			console.log('[info]  Volume up');
+			console.log('[info]  Volume down');
 			volume -= volumeTic
-			playlist.setVolume(volume)
+	    playlist.setVolume(volume)
 			io.emit('set volume', volume);
 			break;
 	}
