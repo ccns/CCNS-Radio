@@ -6,13 +6,15 @@ var view = {
       var item = $('<div/>')
         .addClass('ts item')
         .appendTo(items);
-      var plus_icon = $('<i/>')
-        .addClass('plus icon')
+      var plus_icon = $('<button/>')
+        .addClass('ts icon button')
         .click(plus.bind(this, d.id))
+        .append('<i class="plus icon list-icon"></i>')
         .appendTo(item);
-      var remove_icon = $('<i/>')
-        .addClass('remove icon')
+      var remove_icon = $('<button/>')
+        .addClass('ts icon button')
         .click(removeHistory.bind(this, d.id))
+        .append('<i class="remove icon list-icon"></i>')
         .appendTo(item);
       var a = $('<a/>')
         .text(d.title)
@@ -28,13 +30,15 @@ var view = {
       var item = $('<div/>')
         .addClass('ts item')
         .appendTo(items);
-      var playnow_icon = $('<i/>')
-        .addClass('angle double left icon')
+      var playnow_icon = $('<button/>')
+        .addClass('ts icon button')
         .click(setPlaying.bind(this, d.id))
+        .append('<i class="angle double left icon list-icon"></i>')
         .appendTo(item);
-      var remove_icon = $('<i/>')
-        .addClass('remove icon')
+      var remove_icon = $('<button/>')
+        .addClass('ts icon button')
         .click(removeQueue.bind(this, d.id))
+        .append('<i class="remove icon list-icon"></i>')
         .appendTo(item);
       var a = $('<a/>')
         .text(d.title)
