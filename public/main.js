@@ -31,7 +31,9 @@ $(function() {
 	// handle user enter input
 	$("#urls").keydown(function(event) {
 		if (event.keyCode == 13 && !event.shiftKey) {
+			event.preventDefault();
 			$("#submit-request").click();
+      $("#urls").val("");
 		}
 	})
 
