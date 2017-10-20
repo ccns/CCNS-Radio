@@ -16,5 +16,11 @@ npm install
 npm start
 ```
 
-## Discord bot support
+Costume
+---
+### change kanban musume
+Replace `public/img/kanban-musume` by your musume
+
+Discord bot support
+---
 [Bot invite link (only worked in CCNS's office)](https://discordapp.com/oauth2/authorize?client_id=366233585684054026&scope=bot)
