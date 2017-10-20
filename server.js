@@ -229,44 +229,11 @@ discord.on("message", message => {
   }
 });
 
-discord.on("messageReactionAdd", (messageReaction, user) => {
-  var message = messageReaction.message;
-  if(user.id == discord.user.id) return;
-  if(message.channel.name !== discord_channelName) return;
-  var emoji = messageReaction.emoji;
-  var volume = Number(playlist.getVolume())
-  var volumeTic = 3
-  switch(emoji.name) {
-    case "⏭":
-      var list = playlist.nextSong();
-      io.emit('get song', list);
-      break;
-    case "⏯":
-      console.log('[info]  Pause/Play');
-      io.emit('pauseplay');
-      break;
-    case "➕":
-      if(volume >= 100) console.log('[warning] Volume bound');
-      else {
-        console.log('[info]  Volume up');
-        volume += volumeTic
-        playlist.setVolume(volume)
-        io.emit('set volume', volume);
-      }
-      break;
-    case "➖":
-      if(volume <= 0) console.log('[warning] Volume bound');
-      else {
-        console.log('[info]  Volume down');
-        volume -= volumeTic
-        playlist.setVolume(volume)
-        io.emit('set volume', volume);
-      }
-      break;
-  }
-});
 
-discord.on("messageReactionRemove", (messageReaction, user) => {
+discord.on("messageReactionAdd", reactionController);
+discord.on("messageReactionRemove", reactionController);
+
+function reactionController(messageReaction, user) {
   var message = messageReaction.message;
   if(user.id == discord.user.id) return;
   if(message.channel.name !== discord_channelName) return;
@@ -301,4 +268,5 @@ discord.on("messageReactionRemove", (messageReaction, user) => {
       }
       break;
   }
-});
+}
+
