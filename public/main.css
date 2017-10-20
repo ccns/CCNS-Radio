@@ -15,7 +15,7 @@
 .request .ts.form .field {
  margin-bottom: 10px;
 }
-.plus.icon, .remove.icon {
+.plus.icon, .remove.icon, .angle.double.left.icon {
  cursor: pointer;
  width: auto !important;
 }

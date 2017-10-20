@@ -98,6 +98,13 @@ io.on('connection', function (socket) {
 		var volume = playlist.setVolume(value);
 		io.emit('set volume', volume);
 	});
+	socket.on('set playing', function(data) {
+		var id = data.id;
+		var playing = playlist.setSong(id);
+		var list = playlist.removeQueue(id);
+		io.emit('update list', list);
+		io.emit('set song', playing);
+	});
 
 	// Delete
 	socket.on('remove queue', function (data) {
@@ -213,7 +220,11 @@ discord.on("message", message => {
 			message.channel.send("Wanna play/pause a song!");
 			break;
 		case "controller":
-			(message.react("⏯")).then(() => message.react("⏭"))
+			Promise.resolve()
+				.then(() => message.react("⏯"))
+				.then(() => message.react("⏭"))
+				.then(() => message.react("➖"))
+				.then(() => message.react("➕"))
 			break;
 	}
 
@@ -224,6 +235,8 @@ discord.on("messageReactionAdd", (messageReaction, user) => {
 	if(user.id == discord.user.id) return;
 	if(message.channel.name !== discord_channelName) return;
 	var emoji = messageReaction.emoji;
+	var volume = Number(playlist.getVolume())
+	var volumeTic = 3
 	switch(emoji.name) {
 		case "⏭":
 			var list = playlist.nextSong();
@@ -232,6 +245,24 @@ discord.on("messageReactionAdd", (messageReaction, user) => {
 		case "⏯":
 			console.log('[info]  Pause/Play');
 			io.emit('pauseplay');
+			break;
+		case "➕":
+			if(volume >= 100) console.log('[warning] Volume bound');
+			else {
+				console.log('[info]  Volume up');
+				volume += volumeTic
+				playlist.setVolume(volume)
+				io.emit('set volume', volume);
+			}
+			break;
+		case "➖":
+			if(volume <= 0) console.log('[warning] Volume bound');
+			else {
+				console.log('[info]  Volume down');
+				volume -= volumeTic
+				playlist.setVolume(volume)
+				io.emit('set volume', volume);
+			}
 			break;
 	}
 });
@@ -241,6 +272,8 @@ discord.on("messageReactionRemove", (messageReaction, user) => {
 	if(user.id == discord.user.id) return;
 	if(message.channel.name !== discord_channelName) return;
 	var emoji = messageReaction.emoji;
+	var volume = Number(playlist.getVolume())
+	var volumeTic = 3
 	switch(emoji.name) {
 		case "⏭":
 			var list = playlist.nextSong();
@@ -249,6 +282,24 @@ discord.on("messageReactionRemove", (messageReaction, user) => {
 		case "⏯":
 			console.log('[info]  Pause/Play');
 			io.emit('pauseplay');
+			break;
+		case "➕":
+			if(volume >= 100) console.log('[warning] Volume bound');
+			else {
+				console.log('[info]  Volume up');
+				volume += volumeTic
+				playlist.setVolume(volume)
+				io.emit('set volume', volume);
+			}
+			break;
+		case "➖":
+			if(volume <= 0) console.log('[warning] Volume bound');
+			else {
+				console.log('[info]  Volume down');
+				volume -= volumeTic
+	  	  playlist.setVolume(volume)
+				io.emit('set volume', volume);
+			}
 			break;
 	}
 });

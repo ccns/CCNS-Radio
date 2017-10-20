@@ -6,7 +6,12 @@ function setSocketListeners() {
     view.updatePlaying(data);
     play(data.playing.id);
   });
-  socket.on('update list', function (data) {
+  socket.on('set song', function (data) {
+    console.log(data);
+    view.updatePlaying(data);
+    play(data.playing.id);
+  });
+	socket.on('update list', function (data) {
     console.log(data);
     view.updateList(data);
   });

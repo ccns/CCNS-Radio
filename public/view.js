@@ -8,7 +8,6 @@ var view = {
         .appendTo(items);
       var plus_icon = $('<i/>')
         .addClass('plus icon')
-        .css('box-sizing', 'content-box')
         .click(plus.bind(this, d.id))
         .appendTo(item);
       var remove_icon = $('<i/>')
@@ -29,6 +28,10 @@ var view = {
       var item = $('<div/>')
         .addClass('ts item')
         .appendTo(items);
+			var playnow_icon = $('<i/>')
+				.addClass('angle double left icon')
+				.click(setPlaying.bind(this, d.id))
+				.appendTo(item);
       var remove_icon = $('<i/>')
         .addClass('remove icon')
         .click(removeQueue.bind(this, d.id))
