@@ -28,6 +28,13 @@ $(function() {
     });
   });
 
+	// handle user enter input
+	$("#urls").keydown(function(event) {
+		if (event.keyCode == 13 && !event.shiftKey) {
+			$("#submit-request").click();
+		}
+	})
+
   // submit request
   $("#submit-request").click(function(){
     var urls = $("#urls").val().split("\n");
