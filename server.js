@@ -220,7 +220,10 @@ discord.on("message", message => {
 			message.channel.send("Wanna play/pause a song!");
 			break;
 		case "controller":
-			(message.react("⏯")).then(() => message.react("⏭"))
+			message.react("⏯")
+			message.react("⏭")
+			message.react("➕")
+			message.react("➖")
 			break;
 	}
 
@@ -231,6 +234,8 @@ discord.on("messageReactionAdd", (messageReaction, user) => {
 	if(user.id == discord.user.id) return;
 	if(message.channel.name !== discord_channelName) return;
 	var emoji = messageReaction.emoji;
+	var volume = playlist.getVolume()
+	var volumeTic = 5
 	switch(emoji.name) {
 		case "⏭":
 			var list = playlist.nextSong();
@@ -239,6 +244,18 @@ discord.on("messageReactionAdd", (messageReaction, user) => {
 		case "⏯":
 			console.log('[info]  Pause/Play');
 			io.emit('pauseplay');
+			break;
+		case "➕":
+			console.log('[info]  Volume up');
+			volume += volumeTic
+			playlist.setVolume(volume)
+			io.emit('set volume', volume);
+			break;
+		case "➖":
+			console.log('[info]  Volume up');
+			volume -= volumeTic
+			playlist.setVolume(volume)
+			io.emit('set volume', volume);
 			break;
 	}
 });
@@ -248,6 +265,8 @@ discord.on("messageReactionRemove", (messageReaction, user) => {
 	if(user.id == discord.user.id) return;
 	if(message.channel.name !== discord_channelName) return;
 	var emoji = messageReaction.emoji;
+	var volume = playlist.getVolume()
+	var volumeTic = 5
 	switch(emoji.name) {
 		case "⏭":
 			var list = playlist.nextSong();
@@ -256,6 +275,18 @@ discord.on("messageReactionRemove", (messageReaction, user) => {
 		case "⏯":
 			console.log('[info]  Pause/Play');
 			io.emit('pauseplay');
+			break;
+		case "➕":
+			console.log('[info]  Volume up');
+			volume += volumeTic
+			playlist.setVolume(volume)
+			io.emit('set volume', volume);
+			break;
+		case "➖":
+			console.log('[info]  Volume up');
+			volume -= volumeTic
+			playlist.setVolume(volume)
+			io.emit('set volume', volume);
 			break;
 	}
 });
