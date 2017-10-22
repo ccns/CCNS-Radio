@@ -1,19 +1,19 @@
 var controller = {
-  pausePlay: function() {
-    var stat = player.getPlayerState();
-    console.log(stat);
-    switch(stat) {
+  pausePlay: function () {
+    var stat = player.getPlayerState()
+    console.log(stat)
+    switch (stat) {
       case 1:
-        player.pauseVideo();
-        break;
+        player.pauseVideo()
+        break
       case 2:
       case 5:
-        player.playVideo();
-        break;
+        player.playVideo()
+        break
     }
   },
-  setVolume: function(value) {
-    player.setVolume(value);
-    view.updateVolume(value);
+  setVolume: function (value) {
+    player.setVolume(value)
+    view.updateVolume(value)
   }
 }

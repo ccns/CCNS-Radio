@@ -1,0 +1,32 @@
+#!/bin/sh
+
+COMMIT_AGAIN=1
+
+files=$(git diff --cached --name-only --diff-filter=ACM | grep "\.js$")
+if [ "$files" = "" ]; then 
+	exit 0 
+fi
+
+for file in ${files}; do
+	result=$(./node_modules/.bin/eslint ${file} | grep "potentially fixable with the \`--fix\` option.")
+	ADD_AGAIN=1
+	if [ "$result" != "" ]; then
+		COMMIT_AGAIN=0
+		ADD_AGAIN=0
+	fi
+
+	if ./node_modules/.bin/eslint ${file} --fix; then
+		echo "\t\033[32mESLint Passed: ${file}\033[0m"
+	else
+		echo "\t\033[31mESLint Failed: ${file}\033[0m"
+	fi
+
+	if [ $ADD_AGAIN -eq 0 ]; then 
+		git add ${file}
+	fi
+done
+
+if [ $COMMIT_AGAIN -eq 0 ]; then
+	echo "\t\033[31m[!] git added some modified files to index, please recommit again.\033[0m"
+	exit 1
+fi
