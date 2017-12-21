@@ -38,4 +38,12 @@ function setSocketListeners () {
     console.log(data)
     controller.setVolume(data)
   })
+  socket.on('play', function (data) {
+    console.log(data)
+    controller.play(data)
+  })
+  socket.on('pause', function (data) {
+    console.log(data)
+    controller.pause(data)
+  })
 }

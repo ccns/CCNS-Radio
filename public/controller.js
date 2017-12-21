@@ -15,5 +15,11 @@ var controller = {
   setVolume: function (value) {
     player.setVolume(value)
     view.updateVolume(value)
+  },
+  play: function (value) {
+    player.playVideo()
+  },
+  pause: function (value) {
+    player.pauseVideo()
   }
 }

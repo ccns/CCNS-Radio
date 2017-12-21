@@ -44,8 +44,26 @@ app.get('/', function (req, res) {
   { res.render('index', {serverip: localip}) }// sendFile(path.join(__dirname+'/view/index.html'));
   else { res.redirect('/client') }
 })
+
 app.get('/client', function (req, res) {
   res.render('index', {serverip: localip})
+})
+
+// Control api
+app.post('/api/play', function (req, res) {
+  io.emit('play')
+  res.send('Play')
+})
+
+app.post('/api/pause', function (req, res) {
+  io.emit('pause')
+  res.send('Pause')
+})
+
+app.post('/api/next', function (req, res) {
+  var list = playlist.nextSong()
+  io.emit('get song', list)
+  res.send('Next song')
 })
 
 // Websocket
