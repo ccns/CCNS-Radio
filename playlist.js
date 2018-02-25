@@ -27,7 +27,7 @@ Playlist.prototype.newSong = function (id, callback, error) {
   }
 
   if (!in_queue && !in_history && !in_playing) {
-    request('https://www.googleapis.com/youtube/v3/videos?part=snippet&key=AIzaSyD0H-vB9MILeb3nwzpoWYL96puFi_8dsCs&id=' + id, function (err, res, body) {
+    request('https://www.googleapis.com/youtube/v3/videos?part=snippet&key=' + youtube_key + '&id=' + id, function (err, res, body) {
       var body = JSON.parse(body)
       if (body.items.length > 0) {
         var title = body.items[0].snippet.title
