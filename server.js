@@ -11,26 +11,25 @@ const path = require('path')
 const localip = require('internal-ip').v4()
 const config = require('config')
 
-// Init playlist
-const Playlist = require('lib/playlist')
-var playlist = new Playlist()
+const Dispatcher = require('./lib/dispatcher')
+var dispatcher = new Dispatcher(io)
 
-const WebController = require('lib/webcontroller')
+// Init playlist
+const playlist_config = config.get('playlist')
+const Playlist = require('./lib/playlist')
+var playlist = new Playlist(dispatcher, playlist_config)
+
+// Init webcontroller
+const WebController = require('./lib/webcontroller')
+var webController = new WebController(playlist)
 
 // Route
-const ApiRouter = require('route/api')
+const ApiRouter = require('./route/api')
 var apiRouter = new ApiRouter(playlist)
 
 // Discord.js
-const discord_token = config.get('discord_token')
-const discord_prefix = config.get('discord_prefix')
-const discord_channelName = config.get('discord_channelName')
-const DiscordBot = require('lib/discordbot')
-var discord_config = {
-  token: discord_token,
-  prefix: discord_prefix,
-  channelName: discord_channelName
-}
+const discord_config = config.get('discord')
+const DiscordBot = require('./lib/discordbot')
 const discordBot = new DiscordBot(playlist, discord_config)
 
 // Start Server
@@ -57,7 +56,7 @@ app.get('/client', function (req, res) {
   res.render('index', {serverip: localip})
 })
 
-api.use('/api', apiRouter.getRouter())
+app.use('/api', apiRouter.getRouter())
 
 // Websocket
-io.on('connection', webController.connectionHandler)
+io.on('connection', webController.connectionHandler())
