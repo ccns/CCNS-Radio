@@ -15,7 +15,7 @@ function onPlayerReady (event) {
   getPlaying()
   getVolume()
   // mute if client
-  if (window.location.pathname == '/client') { player.mute() }
+  if (window.location.pathname === '/client') { player.mute() }
 }
 
 function onPlayerStateChange (event) {

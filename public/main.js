@@ -30,7 +30,7 @@ $(function () {
 
   // handle user enter input
   $('#urls').keydown(function (event) {
-    if (event.keyCode == 13 && !event.shiftKey) {
+    if (event.keyCode === 13 && !event.shiftKey) {
       event.preventDefault()
       $('#submit-request').click()
       $('#urls').val('')
@@ -42,7 +42,7 @@ $(function () {
     var urls = $('#urls').val().split('\n')
     var fail = []
     urls.map(function (url) {
-      if (url == '') return
+      if (url === '') return
       var match = url.match(/(youtube.com|youtu.be)\/(watch\?)?(\S+)/)
       var playlist_match = url.match(/(youtube.com|youtu.be)\/(playlist\?)(\S+)/)
       if (playlist_match) {
@@ -50,7 +50,7 @@ $(function () {
         var params = {}
         playlist_match[3].split('&').map(function (d) {
           var sp = d.split('=')
-          if (sp.length == 2) { params[sp[0]] = sp[1] } else { params['list'] = sp[0] }
+          if (sp.length === 2) { params[sp[0]] = sp[1] } else { params['list'] = sp[0] }
         })
         data.id = params['list']
         newList(data)
@@ -60,7 +60,7 @@ $(function () {
         match[3].split('&').map(function (d) {
           var sp = d.split('=')
           console.log(sp)
-          if (sp.length == 2) { params[sp[0]] = sp[1] } else { params['v'] = sp[0] }
+          if (sp.length === 2) { params[sp[0]] = sp[1] } else { params['v'] = sp[0] }
         })
         data.id = params['v']
         newSong(data)
@@ -83,7 +83,7 @@ $(function () {
   })
 
   // hide if client
-  if (window.location.pathname == '/client') {
+  if (window.location.pathname === '/client') {
     $('#player').hide()
   }
 })
