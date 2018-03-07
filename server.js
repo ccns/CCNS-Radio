@@ -10,7 +10,7 @@ const path = require('path')
 const localip = require('internal-ip').v4()
 const config = require('config')
 
-//// Module initialization
+/// Module initialization
 // Init dispatcher
 const Dispatcher = require('./lib/dispatcher')
 var dispatcher = new Dispatcher(io)
@@ -33,7 +33,7 @@ const discord_config = config.get('discord')
 const DiscordBot = require('./lib/discordbot')
 const discordBot = new DiscordBot(playlist, discord_config)
 
-//// Express setting
+/// Express setting
 // Init EJS
 app.set('views', path.join(__dirname, 'view'))
 app.engine('html', require('ejs').renderFile)
@@ -55,10 +55,10 @@ app.get('/client', function (req, res) {
 
 app.use('/api', apiRouter.getRouter())
 
-//// Start Server
+/// Start Server
 server.listen(port, function () {
   console.log('Server listening at port %d', port)
 })
 
-//// Socket.io
+/// Socket.io
 io.on('connection', webController.connectionHandler())
