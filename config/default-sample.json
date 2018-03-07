@@ -1,5 +1,10 @@
 {
-  "discord_token": "<TOKEN>",
-  "discord_prefix": "/",
-  "discord_channelName": "radio"
+    "playlist": {
+        "youtube_api_key": "<YOUTUBE_API_KEY>"
+    },
+    "discord": {
+        "token": "<DISCORD_BOT_TOKEN>",
+        "prefix": "/",
+        "channelName": "radio"
+    }
 }
