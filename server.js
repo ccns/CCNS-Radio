@@ -32,6 +32,7 @@ var apiRouter = new ApiRouter(playlist)
 const discord_config = config.get('discord')
 const DiscordBot = require('./lib/discordbot')
 const discordBot = new DiscordBot(playlist, discord_config)
+discordBot.login()
 
 /// Express setting
 // Init EJS
@@ -40,13 +41,14 @@ app.engine('html', require('ejs').renderFile)
 app.set('view engine', 'html')
 
 // Static folder
-app.use(express.static(path.join(__dirname + '/public')))
+app.use(express.static(path.join(__dirname, '/public')))
 
 // Routing
 app.get('/', function (req, res) {
-  if (/127.0.0.1|::1/.test(req.ip)) // in ipv6 localhost look like `::ffff:127.0.0.1`
-  { res.render('index', {serverip: localip}) } // sendFile(path.join(__dirname+'/view/index.html'));
-  else { res.redirect('/client') }
+  // in ipv6 localhost look like `::ffff:127.0.0.1`
+  if (/127.0.0.1|::1/.test(req.ip)) {
+    res.render('index', {serverip: localip})
+  } else { res.redirect('/client') }
 })
 
 app.get('/client', function (req, res) {
