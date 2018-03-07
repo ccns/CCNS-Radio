@@ -28,6 +28,10 @@ var webController = new WebController(playlist)
 const ApiRouter = require('./route/api')
 var apiRouter = new ApiRouter(playlist)
 
+// Init Search router
+const SearchRouter = require('./route/search')
+var searchRouter = new SearchRouter(playlist_config.youtube_api_key)
+
 // Init Discord Bot
 const discord_config = config.get('discord')
 const DiscordBot = require('./lib/discordbot')
@@ -56,6 +60,8 @@ app.get('/client', function (req, res) {
 })
 
 app.use('/api', apiRouter.getRouter())
+
+app.use('/search', searchRouter.getRouter())
 
 /// Start Server
 server.listen(port, function () {
