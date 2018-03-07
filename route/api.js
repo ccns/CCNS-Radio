@@ -5,19 +5,21 @@ class ApiRouter {
     this.router = express.Router()
     this.playlist = playlist
 
+    var self = this
+
     // Control api
     this.router.post('/play', function (req, res) {
-      this.playlist.play()
+      self.playlist.play()
       res.send('Play')
     })
 
     this.router.post('/pause', function (req, res) {
-      this.playlist.pause()
+      self.playlist.pause()
       res.send('Pause')
     })
 
     this.router.post('/next', function (req, res) {
-      this.playlist.next()
+      self.playlist.nextSong()
       res.send('Next song')
     })
   }
