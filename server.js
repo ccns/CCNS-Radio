@@ -6,11 +6,12 @@ const io = require('socket.io')(server)
 const port = process.env.PORT || 3000
 
 // Other requires
-const request = require('request')
 const path = require('path')
 const localip = require('internal-ip').v4()
 const config = require('config')
 
+//// Module initialization
+// Init dispatcher
 const Dispatcher = require('./lib/dispatcher')
 var dispatcher = new Dispatcher(io)
 
@@ -23,21 +24,17 @@ var playlist = new Playlist(dispatcher, playlist_config)
 const WebController = require('./lib/webcontroller')
 var webController = new WebController(playlist)
 
-// Route
+// Init API router
 const ApiRouter = require('./route/api')
 var apiRouter = new ApiRouter(playlist)
 
-// Discord.js
+// Init Discord Bot
 const discord_config = config.get('discord')
 const DiscordBot = require('./lib/discordbot')
 const discordBot = new DiscordBot(playlist, discord_config)
 
-// Start Server
-server.listen(port, function () {
-  console.log('Server listening at port %d', port)
-})
-
-// ejs init
+//// Express setting
+// Init EJS
 app.set('views', path.join(__dirname, 'view'))
 app.engine('html', require('ejs').renderFile)
 app.set('view engine', 'html')
@@ -58,5 +55,10 @@ app.get('/client', function (req, res) {
 
 app.use('/api', apiRouter.getRouter())
 
-// Websocket
+//// Start Server
+server.listen(port, function () {
+  console.log('Server listening at port %d', port)
+})
+
+//// Socket.io
 io.on('connection', webController.connectionHandler())
