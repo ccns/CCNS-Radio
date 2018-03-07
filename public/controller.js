@@ -1,7 +1,6 @@
 var controller = {
   pausePlay: function () {
     var stat = player.getPlayerState()
-    console.log(stat)
     switch (stat) {
       case 1:
         player.pauseVideo()
