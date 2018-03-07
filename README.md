@@ -35,3 +35,12 @@ Replace `public/img/kanban-musume` by your musume(?
 Discord bot support
 ---
 Support discord bot control.
+
+```
+[Command list]
+/playing : Get information of currently playing song. 
+/add [youtube_url] : Add a song.
+/next : Skip current song.
+/playpause : Play/Pause current song.
+/controller : Show controller.
+```
