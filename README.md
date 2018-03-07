@@ -35,3 +35,9 @@ Replace `public/img/kanban-musume` by your musume(?
 Discord bot support
 ---
 Support discord bot control.
+
+TODO
+---
+- [  ] Clean up the frontend log
+- [  ] History restore
+- [  ] Seperate controller and playlist
