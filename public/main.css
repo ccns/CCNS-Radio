@@ -48,7 +48,7 @@
 #kanban {
 	float: right;
 	right: 30px;
-	z-index: 666;
+	z-index: 10;
 	bottom: 22px;
 	position: fixed;
 }
@@ -78,5 +78,34 @@
 }
 
 #search-in-youtube {
-    margin: 1em 0;
+ margin: 1em 0;
+}
+
+#searchModal {
+ display: flex;
+ flex-direction: column;
+ height: 100%;
+}
+#searchModal .header {
+ margin-bottom: 0px;
+}
+#searchModal .searchbar {
+ padding: 10px 10px;
+}
+#searchModal .content {
+ overflow-y: scroll;
+
+ display: flex;
+ flex-direction: column;
+}
+#searchModal .actions {
+}
+#searchModal .myListItem {
+ display: flex;
+ align-items: flex-start;
+}
+#searchModal .myListItem > .ts.image {
+}
+#searchModal .myListItem > .description {
+ padding-left: 10px;
 }

@@ -76,6 +76,13 @@ $(function () {
     }
   })
 
+  $('#open-search-modal').click(function () {
+    $('#searchModalDimmer').addClass('active')
+  })
+  $('#close-search-modal').click(function () {
+    $('#searchModalDimmer').removeClass('active')
+  })
+
   // volume change
   $('#volume').change(function () {
     var value = $(this).val()
