@@ -76,13 +76,6 @@ $(function () {
     }
   })
 
-  $('#open-search-modal').click(function () {
-    $('#searchModalDimmer').addClass('active')
-  })
-  $('#close-search-modal').click(function () {
-    $('#searchModalDimmer').removeClass('active')
-  })
-
   // volume change
   $('#volume').change(function () {
     var value = $(this).val()
@@ -93,4 +86,22 @@ $(function () {
   if (window.location.pathname === '/client') {
     $('#player').hide()
   }
+
+  // Open search modal
+  $('#open-search-modal').click(function () {
+    $('#searchModalDimmer').addClass('active')
+  })
+  $('#close-search-modal').click(function () {
+    $('#searchModalDimmer').removeClass('active')
+  })
+
+  // Fetching search result
+  $('#searchSubmit').click(function () {
+    var list = $('#searchModal .ts.list').empty()
+    var query = $('#searchQuery').val()
+    fetchSearchResult(query)
+  })
+  $('#searchQuery').keypress(function (e) {
+    if (e.which == 13) $('#searchSubmit').click()
+  })
 })

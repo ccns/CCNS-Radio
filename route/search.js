@@ -17,21 +17,11 @@ class SearchRouter {
       var q = req.body.q
       var pageToken = req.body.pageToken
 
-      if (typeof pageToken === 'undefined') {
-        self.search(q).then(function (data) {
-          res.json(data)
-        }).catch(function (err) {
-          res.send('Failed')
-          console.log(err)
-        })
-      } else {
-        self.nextPage(q, pageToken).then(function (data) {
-          res.json(data)
-        }).catch(function (err) {
-          res.send('Failed')
-          console.log(err)
-        })
-      }
+      self.search(q, pageToken).then(function (data) {
+        res.json(data)
+      }).catch(function (err) {
+        res.send('Failed')
+      })
     })
   }
 
@@ -39,55 +29,24 @@ class SearchRouter {
     return this.router
   }
 
-  search (query) {
+  search (query, pageToken) {
     var q = query
     var maxResults = 25
     var type = 'video,playlist'
 
     var url = this.base_url +
-              '&q=' + query +
+              '&q=' + encodeURIComponent(query) +
               '&maxResults=' + maxResults +
               '&type=' + type
 
-    return new Promise(function (resolve, reject) {
-      request(url, function (err, res, body) {
-        var body = JSON.parse(body)
-        if (!err) {
-          var items = body.items
-          var nextPageToken = body.nextPageToken
-          var prevPageToken = body.prevPageToken
-          items = items.map(function (item) {
-            return {
-              id: item.id.videoId,
-              title: item.snippet.title,
-              url: 'https://youtu.be/' + item.id.videoId,
-              thumbnail: item.snippet.thumbnails.default
-            }
-          })
-          resolve({items: items, nextPageToken: nextPageToken, prevPageToken: prevPageToken})
-        } else {
-          console.log('[error] Search failed.')
-          reject(err)
-        }
-      })
-    })
-  }
-
-  nextPage (query, pageToken) {
-    var q = query
-    var maxResults = 25
-    var type = 'video,playlist'
-
-    var url = this.base_url +
-              '&q=' + query +
-              '&maxResults=' + maxResults +
-              '&type=' + type +
-              '&pageToken=' + pageToken
+    if (pageToken != undefined) {
+      url += '&pageToken=' + pageToken
+    }
 
     return new Promise(function (resolve, reject) {
       request(url, function (err, res, body) {
-        var body = JSON.parse(body)
-        if (!err) {
+        if (!err && res.statusCode == 200) {
+          var body = JSON.parse(body)
           var items = body.items
           var nextPageToken = body.nextPageToken
           var prevPageToken = body.prevPageToken
