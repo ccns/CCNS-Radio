@@ -15,6 +15,7 @@ function setSocketListeners () {
     view.updateList(data)
   })
 
+  // deprecated
   socket.on('update playing', function (data) {
     if (data.playing) {
       view.updatePlaying(data)
