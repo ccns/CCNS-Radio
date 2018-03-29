@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "nodemon server.js",
-    "start": "env PORT=80 node server.js"
+    "start": "env PORT=3000 node server.js"
   },
   "author": "",
   "license": "MIT",
