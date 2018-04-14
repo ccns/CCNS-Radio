@@ -11,6 +11,7 @@ function onYouTubeIframeAPIReady () {
 }
 
 function onPlayerReady (event) {
+  initSocketIO()
   getList()
   getPlaying()
   getVolume()
@@ -23,6 +24,7 @@ function onPlayerStateChange (event) {
     nextSong()
   }
 }
+
 
 function play (id) {
   load(id)

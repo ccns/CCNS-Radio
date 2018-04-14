@@ -1,10 +1,4 @@
 $(function () {
-  // get socket after document ready
-  setSocketListeners()
-
-  // load youtube player
-  $.getScript('https://www.youtube.com/iframe_api')
-
   // next song
   $('#next').click(function () {
     nextSong()
