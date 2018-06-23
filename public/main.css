@@ -126,7 +126,9 @@
 }
 #queue, #history {
   margin-top: 2em;
-  height: 30em;
-  height: 60vh;
+  height: 70vh;
   overflow: auto;
+}
+#queue::-webkit-scrollbar, #history::-webkit-scrollbar {
+  display: none;
 }
