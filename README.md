@@ -44,3 +44,26 @@ Support discord bot control.
 /playpause : Play/Pause current song.
 /controller : Show controller.
 ```
+
+Web API
+---
+### POST `/play`
+* body: none
+* response:
+```
+Play
+```
+
+### POST `/pause`
+* body: none
+* response:
+```
+Pause
+```
+
+### POST `/next`
+* body: none
+* response:
+```
+Next song
+```
