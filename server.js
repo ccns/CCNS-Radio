@@ -34,9 +34,11 @@ var searchRouter = new SearchRouter(playlist_config.youtube_api_key)
 
 // Init Discord Bot
 const discord_config = config.get('discord')
-const DiscordBot = require('./lib/discordbot')
-const discordBot = new DiscordBot(playlist, discord_config)
-discordBot.login()
+if(discord_config.enabled) {
+  const DiscordBot = require('./lib/discordbot')
+  const discordBot = new DiscordBot(playlist, discord_config)
+  discordBot.login()
+}
 
 /// Express setting
 // Init EJS
