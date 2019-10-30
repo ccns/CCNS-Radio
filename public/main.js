@@ -36,29 +36,23 @@ $(function () {
     var urls = $('#urls').val().split('\n')
     var fail = []
     urls.map(function (url) {
-      if (url === '') return
-      var match = url.match(/(youtube.com|youtu.be)\/(watch\?)?(\S+)/)
-      var playlist_match = url.match(/(youtube.com|youtu.be)\/(playlist\?)(\S+)/)
-      if (playlist_match) {
-        var data = {}
-        var params = {}
-        playlist_match[3].split('&').map(function (d) {
-          var sp = d.split('=')
-          if (sp.length === 2) { params[sp[0]] = sp[1] } else { params['list'] = sp[0] }
-        })
-        data.id = params['list']
-        newList(data)
-      } else if (match) {
-        var data = {}
-        var params = {}
-        match[3].split('&').map(function (d) {
-          var sp = d.split('=')
-          console.log(sp)
-          if (sp.length === 2) { params[sp[0]] = sp[1] } else { params['v'] = sp[0] }
-        })
-        data.id = params['v']
-        newSong(data)
-      } else {
+      parsed = urlParser.parse(url)
+      if (parsed && parsed.provider === 'youtube') {
+        let data = {}
+        switch (parsed.mediaType) {
+          case 'video':
+            data.id = parsed.id
+            newSong(data)
+            break
+          case 'playlist':
+            data.id = parsed.list
+            newList(data)
+            break
+          default:
+            fail.push(url)
+        }
+      }
+      else {
         fail.push(url)
       }
     })
