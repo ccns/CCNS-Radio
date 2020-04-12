@@ -67,7 +67,12 @@ $(function () {
   // volume change
   $('#volume').change(function () {
     var value = $(this).val()
-    setVolume(value)
+    if (window.location.pathname === '/client') { // service mode
+      player.setVolume(value)
+    } else { // station mode
+      setVolume(value)
+    }
+
   })
 
   // hide player if control
