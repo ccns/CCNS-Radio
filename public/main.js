@@ -70,9 +70,14 @@ $(function () {
     setVolume(value)
   })
 
-  // hide if client
-  if (window.location.pathname === '/client') {
+  // hide player if control
+  if (window.location.pathname === '/control') {
     $('#player').hide()
+  }
+
+  // hide next if client
+  if (window.location.pathname === '/client') {
+    $('#next').hide()
   }
 
   // Open search modal

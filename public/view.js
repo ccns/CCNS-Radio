@@ -30,11 +30,14 @@ var view = {
       var item = $('<div/>')
         .addClass('ts item')
         .appendTo(items)
-      var playnow_icon = $('<button/>')
-        .addClass('ts icon button')
-        .click(setPlaying.bind(this, d.id))
-        .append('<i class="angle double left icon list-icon"></i>')
-        .appendTo(item)
+      // don't show playnow button if client
+      if (window.location.pathname !== '/client') {
+        var playnow_icon = $('<button/>')
+          .addClass('ts icon button')
+          .click(setPlaying.bind(this, d.id))
+          .append('<i class="angle double left icon list-icon"></i>')
+          .appendTo(item)
+      }
       var remove_icon = $('<button/>')
         .addClass('ts icon button')
         .click(removeQueue.bind(this, d.id))

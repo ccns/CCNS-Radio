@@ -1,8 +1,10 @@
 {
+    "mode": "<service|station>",
     "playlist": {
         "youtube_api_key": "<YOUTUBE_API_KEY>"
     },
     "discord": {
+        "enabled": "false",
         "token": "<DISCORD_BOT_TOKEN>",
         "prefix": "/",
         "channelName": "radio"

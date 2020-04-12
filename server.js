@@ -51,10 +51,18 @@ app.use(express.static(path.join(__dirname, '/public')))
 
 // Routing
 app.get('/', function (req, res) {
-  // in ipv6 localhost look like `::ffff:127.0.0.1`
-  if (/127.0.0.1|::1/.test(req.ip)) {
-    res.render('index', {serverip: localip})
-  } else { res.redirect('/client') }
+    // in ipv6 localhost look like `::ffff:127.0.0.1`
+    if (/127.0.0.1|::1/.test(req.ip)) {
+      res.render('index', {serverip: localip})
+    } else if(config.mode == 'station') {
+      res.redirect('/control')
+    } else if(config.mode == 'service') {
+      res.redirect('/client')
+    }
+})
+
+app.get('/control', function (req, res) {
+  res.render('index', {serverip: localip})
 })
 
 app.get('/client', function (req, res) {
