@@ -77,6 +77,8 @@ $(function () {
 
   // hide next if client
   if (window.location.pathname === '/client') {
+    $('#radio').hide()
+    $('#playpause').hide()
     $('#next').hide()
   }
 

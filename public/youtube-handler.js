@@ -15,13 +15,13 @@ function onPlayerReady (event) {
   getList()
   getPlaying()
   getVolume()
-  // mute if client
-  if (window.location.pathname === '/client') { player.mute() }
+  // mute if controller
+  if (window.location.pathname === '/control') { player.mute() }
 }
 
 function onPlayerStateChange (event) {
   if (event.data === 0) {
-    nextSong()
+    if(window.location.pathname == '/') { nextSong() }
   }
 }
 

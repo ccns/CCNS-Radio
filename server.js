@@ -9,6 +9,7 @@ const port = process.env.PORT || 3000
 const path = require('path')
 const localip = require('internal-ip').v4()
 const config = require('config')
+const server_mode = config.get('mode')
 
 /// Module initialization
 // Init dispatcher
@@ -18,7 +19,7 @@ var dispatcher = new Dispatcher(io)
 // Init playlist
 const playlist_config = config.get('playlist')
 const Playlist = require('./lib/playlist')
-var playlist = new Playlist(dispatcher, playlist_config)
+var playlist = new Playlist(dispatcher, playlist_config, server_mode)
 
 // Init webcontroller
 const WebController = require('./lib/webcontroller')
@@ -54,9 +55,9 @@ app.get('/', function (req, res) {
     // in ipv6 localhost look like `::ffff:127.0.0.1`
     if (/127.0.0.1|::1/.test(req.ip)) {
       res.render('index', {serverip: localip})
-    } else if(config.mode == 'station') {
+    } else if(server_mode == 'station') {
       res.redirect('/control')
-    } else if(config.mode == 'service') {
+    } else if(server_mode == 'service') {
       res.redirect('/client')
     }
 })
