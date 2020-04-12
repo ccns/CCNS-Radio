@@ -1,3 +1,6 @@
 node_modules
 config/default.json
 .eslintrc.json
+
+.*.swo
+.*.swp
