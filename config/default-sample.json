@@ -1,7 +1,8 @@
 {
     "mode": "<service|station>",
     "playlist": {
-        "youtube_api_key": "<YOUTUBE_API_KEY>"
+        "youtube_api_key": "<YOUTUBE_API_KEY>",
+        "database": "<firestore|local>"
     },
     "discord": {
         "enabled": "false",
