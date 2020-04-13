@@ -37,7 +37,7 @@ var searchRouter = new SearchRouter(playlist_config)
 const discord_config = config.get('discord')
 if(discord_config.enabled) {
   const DiscordBot = require('./lib/discordbot')
-  const discordBot = new DiscordBot(playlist, discord_config)
+  const discordBot = new DiscordBot(playlist, discord_config, server_mode)
   discordBot.login()
 }
 
