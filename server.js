@@ -54,7 +54,10 @@ app.use(express.static(path.join(__dirname, '/public')))
 app.get('/', function (req, res) {
     // in ipv6 localhost look like `::ffff:127.0.0.1`
     if (/127.0.0.1|::1/.test(req.ip)) {
-      res.render('index', {serverip: localip})
+      res.render('index', {
+        serverip: localip,
+        info: "新增歌曲: http://ccns-radio:3000"
+      })
     } else if(server_mode == 'station') {
       res.redirect('/control')
     } else if(server_mode == 'service') {
@@ -63,11 +66,17 @@ app.get('/', function (req, res) {
 })
 
 app.get('/control', function (req, res) {
-  res.render('index', {serverip: localip})
+  res.render('index', {
+    serverip: localip,
+    info: "控制器模式"
+  })
 })
 
 app.get('/client', function (req, res) {
-  res.render('index', {serverip: localip})
+  res.render('index', {
+    serverip: localip,
+    info: "歡迎光臨"
+  })
 })
 
 app.use('/api', apiRouter.getRouter())
