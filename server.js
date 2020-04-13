@@ -31,7 +31,7 @@ var apiRouter = new ApiRouter(playlist)
 
 // Init Search router
 const SearchRouter = require('./route/search')
-var searchRouter = new SearchRouter(playlist_config.youtube_api_key)
+var searchRouter = new SearchRouter(playlist_config)
 
 // Init Discord Bot
 const discord_config = config.get('discord')
