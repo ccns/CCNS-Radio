@@ -23,7 +23,7 @@ var playlist = new Playlist(dispatcher, playlist_config, server_mode)
 
 // Init webcontroller
 const WebController = require('./lib/webcontroller')
-var webController = new WebController(playlist)
+var webController = new WebController(playlist, io)
 
 // Init API router
 const ApiRouter = require('./route/api')

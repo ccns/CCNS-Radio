@@ -48,6 +48,11 @@ function initSocketIO () {
   socket.on('pause', function (data) {
     controller.pause(data)
   })
+
+  socket.on('user count', function (data) {
+    console.log(data)
+    $('#user-count').text(data)
+  })
 }
 
 // socket.emit
