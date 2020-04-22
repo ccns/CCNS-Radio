@@ -8,6 +8,7 @@
         "enabled": "false",
         "token": "<DISCORD_BOT_TOKEN>",
         "prefix": "/",
-        "channelName": "radio"
+        "commandChannelNames": ["radio", "music"],
+        "replyChannelName": "radio"
     }
 }
