@@ -5,7 +5,7 @@
         "database": "<firestore|local>"
     },
     "discord": {
-        "enabled": "false",
+        "enabled": false,
         "token": "<DISCORD_BOT_TOKEN>",
         "prefix": "/",
         "commandChannelNames": ["radio", "music"],
