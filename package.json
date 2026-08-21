@@ -30,7 +30,8 @@
     "protobufjs": "^6.11.3",
     "request": "^2.88.0",
     "socket.io": "^2.1.1",
-    "socket.io-parser": "^3.3.3"
+    "socket.io-parser": "^3.3.3",
+    "websocket-driver": "^0.7.5"
   },
   "devDependencies": {
     "eslint": "^4.9.0",
