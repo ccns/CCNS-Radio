@@ -16,6 +16,7 @@
     "config": "^1.31.0",
     "discord.js": "^11.2.1",
     "ejs": "^3.1.7",
+    "engine.io": "^3.6.1",
     "express": "^4.17.3",
     "firebase-admin": "^8.10.0",
     "googleapis": "^48.0.0",
@@ -30,7 +31,7 @@
     "path-parse": "^1.0.7",
     "protobufjs": "^6.11.3",
     "request": "^2.88.0",
-    "socket.io": "^2.1.1",
+    "socket.io": "^2.5.0",
     "socket.io-parser": "^3.3.3",
     "websocket-driver": "^0.7.5"
   },
