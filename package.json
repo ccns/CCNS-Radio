@@ -15,7 +15,7 @@
     "config": "^1.31.0",
     "discord.js": "^11.2.1",
     "ejs": "^3.1.7",
-    "express": "^4.15.2",
+    "express": "^4.22.2",
     "firebase-admin": "^8.10.0",
     "googleapis": "^48.0.0",
     "hosted-git-info": "^2.8.9",
