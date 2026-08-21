@@ -21,6 +21,7 @@
     "hosted-git-info": "^2.8.9",
     "internal-ip": "^1.2.0",
     "iso8601-duration": "^1.2.0",
+    "json-schema": "^0.4.0",
     "lodash": "^4.17.21",
     "minimatch": "^3.1.2",
     "request": "^2.88.0",
