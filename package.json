@@ -42,5 +42,8 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1"
+  },
+  "overrides": {
+    "form-data": "4.0.6"
   }
 }
