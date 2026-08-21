@@ -23,7 +23,8 @@
     "iso8601-duration": "^1.2.0",
     "lodash": "^4.17.21",
     "request": "^2.88.0",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.1.1",
+    "socket.io-parser": "^3.3.3"
   },
   "devDependencies": {
     "eslint": "^4.9.0",
