@@ -20,6 +20,7 @@
     "googleapis": "^48.0.0",
     "internal-ip": "^1.2.0",
     "iso8601-duration": "^1.2.0",
+    "lodash": "^4.17.21",
     "request": "^2.88.0",
     "socket.io": "^2.1.1"
   },
