@@ -31,8 +31,8 @@
     "path-parse": "^1.0.7",
     "protobufjs": "^6.11.3",
     "request": "^2.88.0",
-    "socket.io": "^2.5.0",
-    "socket.io-parser": "^3.3.3",
+    "socket.io": "^4.8.3",
+    "socket.io-parser": "^4.2.7",
     "websocket-driver": "^0.7.5"
   },
   "devDependencies": {
